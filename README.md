@@ -27,7 +27,7 @@ by refusing mangled encoded inputs.
 // import { decodeBase64 } from "@levischuck/tiny-encodings";
 // or Deno
 // import { decodeBase64 } from "https://deno.land/x/tiny_encodings@version/encoding.ts";
-import {decodeBase64} from './encoding.ts'
+import { decodeBase64 } from "./encoding.ts";
 
 decodeBase64("SGVsbG8gd29ybGQ=");
 // returns a Uint8Array with the bytes for "Hello world"

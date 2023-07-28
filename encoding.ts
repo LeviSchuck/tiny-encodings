@@ -237,10 +237,10 @@ function decodeBase64Alphabet(
   let unsupported: number | null = null;
   const totalLength = length - lengthMod4;
   for (let i = 0; i < totalLength; i += 4, index += 3) {
-    const aValue = alphabet[input[i]];
-    const bValue = alphabet[input[i + 1]];
-    const cValue = alphabet[input[i + 2]];
-    const dValue = alphabet[input[i + 3]];
+    const aValue = alphabet[input[i]]|0;
+    const bValue = alphabet[input[i + 1]]|0;
+    const cValue = alphabet[input[i + 2]]|0;
+    const dValue = alphabet[input[i + 3]]|0;
     output[index] = (aValue << 2) | ((bValue & 0b110000) >> 4);
     output[index + 1] = ((bValue & 0xF) << 4) | ((cValue & 0b111100) >> 2);
     output[index + 2] = ((cValue & 0b11) << 6) | dValue;
@@ -298,12 +298,12 @@ function decodeBase64Alphabet(
     }
   }
 }
-function calculateLength(text: string) {
+function calculateLength(text: Uint8Array) {
   let length = text.length;
   // Subtract padding
   for (let i = length - 1; i >= 0; i--) {
-    if (text.slice(i, i + 1) == "=") {
-      length--;
+    if (text[i] == 61) {
+      length = i;
     }
   }
   const lengthMod4 = length % 4;
@@ -331,8 +331,8 @@ export function decodeBase64(text: string): Uint8Array {
       BASE64_CACHE[BASE64_ALPHABET.charCodeAt(i)] = i;
     }
   }
-  const [length, lengthMod4, byteLength] = calculateLength(text);
   const input = ENCODER.encode(text);
+  const [length, lengthMod4, byteLength] = calculateLength(input);
   const output = new Uint8Array(byteLength);
   decodeBase64Alphabet(input, length, lengthMod4, output, BASE64_CACHE);
   return output;
@@ -349,8 +349,8 @@ export function decodeBase64Url(text: string): Uint8Array {
       BASE64_URL_CACHE[BASE64_URL_ALPHABET.charCodeAt(i)] = i;
     }
   }
-  const [length, lengthMod4, byteLength] = calculateLength(text);
   const input = ENCODER.encode(text);
+  const [length, lengthMod4, byteLength] = calculateLength(input);
   const output = new Uint8Array(byteLength);
   decodeBase64Alphabet(input, length, lengthMod4, output, BASE64_URL_CACHE);
   return output;

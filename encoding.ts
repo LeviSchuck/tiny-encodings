@@ -36,45 +36,30 @@ function bufferToDataView(v: BufferType): DataView {
   throw new Error("Unsupported type");
 }
 
-const HEX = [
-  48, // 0
-  49, // 1
-  50, // 2
-  51, // 3
-  52, // 4
-  53, // 5
-  54, // 6
-  55, // 7
-  56, // 8
-  57, // 9
-  65, // A
-  66, // B
-  67, // C
-  68, // D
-  69, // E
-  70, // F
-];
 const DECODER = new TextDecoder();
 const ENCODER = new TextEncoder();
+const HEX = ENCODER.encode("0123456789ABCDEF");
+const HEX_CACHE = new Uint8Array(256);
 
-function encodeHexFromUint8Array(array: Uint8Array): string {
-  if (array.length == 0) {
+function encodeHexFromView(view: DataView): string {
+  if (view.byteLength == 0) {
     return "";
   }
-  const hexBytes = new Uint8Array(array.length * 2);
-  array.forEach((byte, index) => {
-    const hexIndex = index * 2;
-    hexBytes[hexIndex] = HEX[(0xF0 & byte) >> 4];
-    hexBytes[hexIndex + 1] = HEX[0x0F & byte];
-  });
+  const length = view.byteLength;
+  const hexBytes = new Uint8Array(view.byteLength * 2);
+
+  for (let index = 0, outIndex = 0; index < length; index++, outIndex += 2) {
+    const byte = view.getUint8(index);
+    hexBytes[outIndex] = HEX[(byte & 0xF0) >> 4];
+    hexBytes[outIndex + 1] = HEX[byte & 0x0F];
+  }
   return DECODER.decode(hexBytes);
 }
 
 export function encodeHex(array: ArrayBuffer | TypedArray | DataView): string {
-  if (array instanceof Uint8Array) {
-    return encodeHexFromUint8Array(array);
-  } else if (
-    array instanceof ArrayBuffer || array instanceof Int8Array ||
+  if (
+    array instanceof Uint8Array ||
+    array instanceof Int8Array ||
     array instanceof Int16Array ||
     array instanceof Uint16Array ||
     array instanceof Int32Array ||
@@ -85,9 +70,11 @@ export function encodeHex(array: ArrayBuffer | TypedArray | DataView): string {
     array instanceof BigInt64Array ||
     array instanceof BigUint64Array
   ) {
-    return encodeHexFromUint8Array(new Uint8Array(array));
+    return encodeHexFromView(new DataView(array.buffer));
+  } else if (array instanceof ArrayBuffer) {
+    return encodeHexFromView(new DataView(array));
   } else if (array instanceof DataView) {
-    return encodeHexFromUint8Array(new Uint8Array(array.buffer));
+    return encodeHexFromView(array);
   } else {
     throw new Error("Bad input to encodeHex");
   }
@@ -98,7 +85,6 @@ export function decodeHex(text: string): Uint8Array {
   if (text == "") {
     return new Uint8Array();
   }
-  const bytes = new Uint8Array(Math.ceil(text.length / 2));
   const hexBytes = ENCODER.encode(text);
   let index = 0;
   let badHex = false;
@@ -106,32 +92,30 @@ export function decodeHex(text: string): Uint8Array {
     // Only even lengths
     throw new Error(BAD_INPUT_HEX);
   }
+  if (HEX_CACHE[0] == 0) {
+    for (let i = 0; i < 256; i++) {
+      if (i >= 48 && i <= 57) {
+        HEX_CACHE[i] = i - 48;
+      } else if (i >= 65 && i <= 70) {
+        HEX_CACHE[i] = i - 55;
+      } else if (i >= 97 && i <= 102) {
+        HEX_CACHE[i] = i - 87;
+      } else {
+        HEX_CACHE[i] = 255;
+      }
+    }
+  }
+  const bytes = new Uint8Array(Math.ceil(text.length / 2));
   for (let i = 0; i < hexBytes.length; i += 2, index++) {
     const leftHex = hexBytes[i];
     const rightHex = hexBytes[i + 1];
-    let left: number;
-    if (leftHex >= 48 && leftHex <= 57) {
-      left = leftHex - 48;
-    } else if (leftHex >= 65 && leftHex <= 70) {
-      left = leftHex - 55;
-    } else if (leftHex >= 97 && leftHex <= 102) {
-      left = leftHex - 87;
-    } else {
-      badHex = true;
-      break;
-    }
-    let right: number;
-    if (rightHex >= 48 && rightHex <= 57) {
-      right = rightHex - 48;
-    } else if (rightHex >= 65 && rightHex <= 70) {
-      right = rightHex - 55;
-    } else if (rightHex >= 97 && rightHex <= 102) {
-      right = rightHex - 87;
-    } else {
-      badHex = true;
-      break;
-    }
+    const left = HEX_CACHE[leftHex];
+    const right = HEX_CACHE[rightHex];
     bytes[index] = left << 4 | right;
+    if (left == 255 || right == 255) {
+      badHex = true;
+      break;
+    }
   }
   if (badHex) {
     throw new Error(BAD_INPUT_HEX);
@@ -237,10 +221,10 @@ function decodeBase64Alphabet(
   let unsupported: number | null = null;
   const totalLength = length - lengthMod4;
   for (let i = 0; i < totalLength; i += 4, index += 3) {
-    const aValue = alphabet[input[i]]|0;
-    const bValue = alphabet[input[i + 1]]|0;
-    const cValue = alphabet[input[i + 2]]|0;
-    const dValue = alphabet[input[i + 3]]|0;
+    const aValue = alphabet[input[i]];
+    const bValue = alphabet[input[i + 1]];
+    const cValue = alphabet[input[i + 2]];
+    const dValue = alphabet[input[i + 3]];
     output[index] = (aValue << 2) | ((bValue & 0b110000) >> 4);
     output[index + 1] = ((bValue & 0xF) << 4) | ((cValue & 0b111100) >> 2);
     output[index + 2] = ((cValue & 0b11) << 6) | dValue;

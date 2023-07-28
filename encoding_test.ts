@@ -23,7 +23,7 @@ describe("Hex Decoding", () => {
   });
   it("Hex decoding accepts empty", () => {
     assertEquals(decodeHex(""), new Uint8Array([]));
-  })
+  });
   it("Decode Hex throws on null", () => {
     assertThrows(() => {
       decodeHex(null as any);
@@ -61,7 +61,7 @@ describe("Hex Encoding", () => {
       encodeHex("taco" as any);
     });
   });
-})
+});
 
 describe("Base64 Decoding", () => {
   it("Base64 denies mangled padding", () => {
@@ -87,20 +87,20 @@ describe("Base64 Decoding", () => {
     );
     assertEquals(
       decodeBase64("AQID"),
-      new Uint8Array([1, 2, 3])
-    )
+      new Uint8Array([1, 2, 3]),
+    );
     assertEquals(
       decodeBase64("AQIDAQID"),
-      new Uint8Array([1, 2, 3, 1, 2, 3])
-    )
+      new Uint8Array([1, 2, 3, 1, 2, 3]),
+    );
     assertEquals(
       decodeBase64("/+7d"),
-      new Uint8Array([0xff, 0xee, 0xdd])
-    )
+      new Uint8Array([0xff, 0xee, 0xdd]),
+    );
     assertEquals(
       decodeBase64("/+7d/+7d"),
-      new Uint8Array([0xff, 0xee, 0xdd, 0xff, 0xee, 0xdd])
-    )
+      new Uint8Array([0xff, 0xee, 0xdd, 0xff, 0xee, 0xdd]),
+    );
     assertEquals(
       decodeBase64("aGVsbG8gd29ybGQ="),
       textEncoder.encode("hello world"),
@@ -154,7 +154,7 @@ describe("Base64 URL Encoding", () => {
     assertEquals(encodeBase64Url(new Uint8Array([0, 0, 254])), "AAD-");
     assertEquals(encodeBase64Url(new Uint8Array([0, 0, 255])), "AAD_");
   });
-})
+});
 describe("Base64 URL Decoding", () => {
   it("Base64 url decoding works", () => {
     assertEquals(

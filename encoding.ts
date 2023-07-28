@@ -13,29 +13,11 @@ export type TypedArray =
   | BigInt64Array
   | BigUint64Array;
 export type BufferType = TypedArray | ArrayBuffer | DataView;
-function bufferToUint8Array(v: BufferType) : Uint8Array {
-  if (v instanceof Uint8Array) {
-    return v;
-  } else if (v instanceof DataView) {
-    return new Uint8Array(v.buffer);
-  } else if (v instanceof ArrayBuffer || v instanceof Int8Array ||
-    v instanceof Int16Array ||
-    v instanceof Uint16Array ||
-    v instanceof Int32Array ||
-    v instanceof Uint32Array ||
-    v instanceof Uint8ClampedArray ||
-    v instanceof Float32Array ||
-    v instanceof Float64Array ||
-    v instanceof BigInt64Array ||
-    v instanceof BigUint64Array){
-    return new Uint8Array(v);
-  }
-  throw new Error('Expected a buffer');
-}
-function bufferToDataView(v: BufferType) : DataView {
+function bufferToDataView(v: BufferType): DataView {
   if (v instanceof DataView) {
     return v;
-  } else if (v instanceof Uint8Array ||
+  } else if (
+    v instanceof Uint8Array ||
     v instanceof Int8Array ||
     v instanceof Int16Array ||
     v instanceof Uint16Array ||
@@ -45,8 +27,9 @@ function bufferToDataView(v: BufferType) : DataView {
     v instanceof Float32Array ||
     v instanceof Float64Array ||
     v instanceof BigInt64Array ||
-    v instanceof BigUint64Array) {
-      return new DataView(v.buffer);
+    v instanceof BigUint64Array
+  ) {
+    return new DataView(v.buffer);
   } else if (v instanceof ArrayBuffer) {
     return new DataView(v);
   }
@@ -70,7 +53,7 @@ const HEX = [
   68, // D
   69, // E
   70, // F
-]
+];
 const DECODER = new TextDecoder();
 const ENCODER = new TextEncoder();
 
@@ -90,7 +73,8 @@ function encodeHexFromUint8Array(array: Uint8Array): string {
 export function encodeHex(array: ArrayBuffer | TypedArray | DataView): string {
   if (array instanceof Uint8Array) {
     return encodeHexFromUint8Array(array);
-  } else if (array instanceof ArrayBuffer || array instanceof Int8Array ||
+  } else if (
+    array instanceof ArrayBuffer || array instanceof Int8Array ||
     array instanceof Int16Array ||
     array instanceof Uint16Array ||
     array instanceof Int32Array ||
@@ -99,12 +83,13 @@ export function encodeHex(array: ArrayBuffer | TypedArray | DataView): string {
     array instanceof Float32Array ||
     array instanceof Float64Array ||
     array instanceof BigInt64Array ||
-    array instanceof BigUint64Array) {
+    array instanceof BigUint64Array
+  ) {
     return encodeHexFromUint8Array(new Uint8Array(array));
   } else if (array instanceof DataView) {
     return encodeHexFromUint8Array(new Uint8Array(array.buffer));
   } else {
-    throw new Error('Bad input to encodeHex');
+    throw new Error("Bad input to encodeHex");
   }
 }
 
@@ -115,7 +100,7 @@ export function decodeHex(text: string): Uint8Array {
   }
   const bytes = new Uint8Array(Math.ceil(text.length / 2));
   const hexBytes = ENCODER.encode(text);
-  let index = 0
+  let index = 0;
   let badHex = false;
   if (hexBytes.length & 1) {
     // Only even lengths
@@ -123,7 +108,7 @@ export function decodeHex(text: string): Uint8Array {
   }
   for (let i = 0; i < hexBytes.length; i += 2, index++) {
     const leftHex = hexBytes[i];
-    const rightHex = hexBytes[i+1];
+    const rightHex = hexBytes[i + 1];
     let left: number;
     if (leftHex >= 48 && leftHex <= 57) {
       left = leftHex - 48;
@@ -154,7 +139,10 @@ export function decodeHex(text: string): Uint8Array {
   return bytes;
 }
 
-function encodeBase64Length(bufferLength: number, padding: boolean) : [number, number, number] {
+function encodeBase64Length(
+  bufferLength: number,
+  padding: boolean,
+): [number, number, number] {
   const chunks = Math.ceil(bufferLength / 3);
   const withPadding = chunks * 4;
   const mod3 = bufferLength % 3;
@@ -172,20 +160,29 @@ function encodeBase64Length(bufferLength: number, padding: boolean) : [number, n
   return [withPadding, completeChunks, mod3];
 }
 
-const BASE64_ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+const BASE64_ALPHABET =
+  "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 const BASE64_OUT = ENCODER.encode(BASE64_ALPHABET);
 const BASE64_CACHE = new Uint8Array(256);
 
-const BASE64_URL_ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
+const BASE64_URL_ALPHABET =
+  "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
 const BASE64_URL_OUT = ENCODER.encode(BASE64_URL_ALPHABET);
 const BASE64_URL_CACHE = new Uint8Array(256);
 
-function encodeBase64Alphabet(array: BufferType, out: Uint8Array, padding: boolean) {
+function encodeBase64Alphabet(
+  array: BufferType,
+  out: Uint8Array,
+  padding: boolean,
+) {
   const view = bufferToDataView(array);
-  const [encodedLength, encodedChunkableLength, mod3] = encodeBase64Length(view.byteLength, padding);
+  const [encodedLength, encodedChunkableLength, mod3] = encodeBase64Length(
+    view.byteLength,
+    padding,
+  );
   const output = new Uint8Array(encodedLength);
   let outputIndex = 0;
-  for (let i = 0; i < encodedChunkableLength; i+= 3) {
+  for (let i = 0; i < encodedChunkableLength; i += 3) {
     const a = view.getUint8(i);
     const b = view.getUint8(i + 1);
     const c = view.getUint8(i + 2);
@@ -203,12 +200,12 @@ function encodeBase64Alphabet(array: BufferType, out: Uint8Array, padding: boole
       output[outputIndex + 2] = 61;
       output[outputIndex + 3] = 61;
     }
-    
   } else if (mod3 == 2) {
     const a = view.getUint8(encodedChunkableLength);
     const b = view.getUint8(encodedChunkableLength + 1);
     output[outputIndex] = out[(a & 0b1111_1100) >> 2];
-    output[outputIndex + 1] = out[(a & 0b0000_0011) << 4 | (b & 0b1111_0000) >> 4];
+    output[outputIndex + 1] =
+      out[(a & 0b0000_0011) << 4 | (b & 0b1111_0000) >> 4];
     output[outputIndex + 2] = out[(b & 0b1111) << 2];
     if (padding) {
       output[outputIndex + 3] = 61;
@@ -229,9 +226,15 @@ export function encodeBase64Url(
   return encodeBase64Alphabet(array, BASE64_URL_OUT, false);
 }
 
-function decodeBase64Alphabet(input: Uint8Array, length: number, lengthMod4: number, output: Uint8Array, alphabet: Uint8Array) {
+function decodeBase64Alphabet(
+  input: Uint8Array,
+  length: number,
+  lengthMod4: number,
+  output: Uint8Array,
+  alphabet: Uint8Array,
+) {
   let index = 0;
-  let unsupported : number | null = null;
+  let unsupported: number | null = null;
   const totalLength = length - lengthMod4;
   for (let i = 0; i < totalLength; i += 4, index += 3) {
     const aValue = alphabet[input[i]];
@@ -247,8 +250,16 @@ function decodeBase64Alphabet(input: Uint8Array, length: number, lengthMod4: num
     }
   }
   if (unsupported != null) {
-    throw new Error('Unsupported characters in base64: ' + DECODER.decode(new Uint8Array([
-      input[unsupported], input[unsupported + 1], input[unsupported + 2], input[unsupported + 3]])));
+    throw new Error(
+      "Unsupported characters in base64: " + DECODER.decode(
+        new Uint8Array([
+          input[unsupported],
+          input[unsupported + 1],
+          input[unsupported + 2],
+          input[unsupported + 3],
+        ]),
+      ),
+    );
   }
   if (lengthMod4 == 2) {
     const a = input[length - 2];
@@ -256,11 +267,15 @@ function decodeBase64Alphabet(input: Uint8Array, length: number, lengthMod4: num
     const aValue = alphabet[a];
     const bValue = alphabet[b];
     if ((aValue | bValue) == 255) {
-      throw new Error('Unsupported characters in base64: ' + DECODER.decode(new Uint8Array([a, b])) + JSON.stringify([aValue, bValue]));
+      throw new Error(
+        "Unsupported characters in base64: " +
+          DECODER.decode(new Uint8Array([a, b])) +
+          JSON.stringify([aValue, bValue]),
+      );
     }
     output[index] = (aValue << 2) | ((bValue & 0b110000) >> 4);
     if ((bValue & 0b1111) != 0) {
-      throw new Error('Mangled Base64 padding');
+      throw new Error("Mangled Base64 padding");
     }
   } else if (lengthMod4 == 3) {
     const a = input[length - 3];
@@ -270,25 +285,29 @@ function decodeBase64Alphabet(input: Uint8Array, length: number, lengthMod4: num
     const bValue = alphabet[b];
     const cValue = alphabet[c];
     if ((aValue | bValue | cValue) == 255) {
-      throw new Error('Unsupported characters in base64: ' + DECODER.decode(new Uint8Array([a, b, c])) + JSON.stringify([aValue, bValue, cValue]));
+      throw new Error(
+        "Unsupported characters in base64: " +
+          DECODER.decode(new Uint8Array([a, b, c])) +
+          JSON.stringify([aValue, bValue, cValue]),
+      );
     }
-    output[index] = (aValue << 2 )| ((bValue & 0b110000) >> 4);
+    output[index] = (aValue << 2) | ((bValue & 0b110000) >> 4);
     output[index + 1] = ((bValue & 0xF) << 4) | ((cValue & 0b111100) >> 2);
     if ((cValue & 0b11) != 0) {
-      throw new Error('Mangled Base64 padding');
+      throw new Error("Mangled Base64 padding");
     }
   }
 }
 function calculateLength(text: string) {
   let length = text.length;
   // Subtract padding
-  for (let i = length - 1; i >= 0; i--)  {
-    if (text.slice(i, i + 1) == '=') {
+  for (let i = length - 1; i >= 0; i--) {
+    if (text.slice(i, i + 1) == "=") {
       length--;
     }
   }
   const lengthMod4 = length % 4;
-  let byteLength : number;
+  let byteLength: number;
   if (lengthMod4 == 2) {
     byteLength = ((length - 2) / 4) * 3 + 1;
   } else if (lengthMod4 == 3) {
@@ -296,7 +315,7 @@ function calculateLength(text: string) {
   } else if (lengthMod4 == 0) {
     byteLength = length / 4 * 3;
   } else {
-    throw new Error('Invalid base64 length');
+    throw new Error("Invalid base64 length");
   }
   return [length, lengthMod4, byteLength];
 }

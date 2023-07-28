@@ -232,22 +232,19 @@ export function encodeBase64Url(
 function decodeBase64Alphabet(input: Uint8Array, length: number, lengthMod4: number, output: Uint8Array, alphabet: Uint8Array) {
   let index = 0;
   let unsupported : number | null = null;
-  for (let i = 0; i < length - lengthMod4; i += 4, index += 3) {
-    const a = input[i];
-    const b = input[i + 1];
-    const c = input[i + 2];
-    const d = input[i + 3];
-    const aValue = alphabet[a];
-    const bValue = alphabet[b];
-    const cValue = alphabet[c];
-    const dValue = alphabet[d];
+  const totalLength = length - lengthMod4;
+  for (let i = 0; i < totalLength; i += 4, index += 3) {
+    const aValue = alphabet[input[i]];
+    const bValue = alphabet[input[i + 1]];
+    const cValue = alphabet[input[i + 2]];
+    const dValue = alphabet[input[i + 3]];
+    output[index] = (aValue << 2) | ((bValue & 0b110000) >> 4);
+    output[index + 1] = ((bValue & 0xF) << 4) | ((cValue & 0b111100) >> 2);
+    output[index + 2] = ((cValue & 0b11) << 6) | dValue;
     if (aValue == 255 || bValue == 255 || cValue == 255 || dValue == 255) {
       unsupported = i;
       break;
     }
-    output[index] = (aValue << 2) | ((bValue & 0b110000) >> 4);
-    output[index + 1] = ((bValue & 0xF) << 4) | ((cValue & 0b111100) >> 2);
-    output[index + 2] = ((cValue & 0b11) << 6) | dValue;
   }
   if (unsupported != null) {
     throw new Error('Unsupported characters in base64: ' + DECODER.decode(new Uint8Array([

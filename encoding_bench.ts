@@ -7,7 +7,7 @@ import {
   encodeHex,
 } from "./encoding.ts";
 
-const array = new Uint8Array(8192);
+const array = new Uint8Array(128);
 crypto.getRandomValues(array);
 const exampleBase64 = encodeBase64(array);
 const exampleBase64Url = encodeBase64Url(array);

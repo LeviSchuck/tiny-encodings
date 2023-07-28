@@ -1,5 +1,3 @@
-// TODO correct all data view . buffer access
-// TODO ensure padding bits are 0
 export type TypedArray =
   | Int8Array
   | Uint8Array

@@ -64,6 +64,14 @@ describe("Hex Encoding", () => {
 })
 
 describe("Base64 Decoding", () => {
+  it("Base64 denies mangled padding", () => {
+    assertThrows(() => {
+      decodeBase64("A/==");
+    });
+    assertThrows(() => {
+      decodeBase64("AA/=");
+    });
+  });
   it("Base64 decoding works", () => {
     assertEquals(
       decodeBase64("AA=="),

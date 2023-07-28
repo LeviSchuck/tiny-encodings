@@ -231,6 +231,7 @@ export function encodeBase64Url(
 
 function decodeBase64Alphabet(input: Uint8Array, length: number, lengthMod4: number, output: Uint8Array, alphabet: Uint8Array) {
   let index = 0;
+  let unsupported : number | null = null;
   for (let i = 0; i < length - lengthMod4; i += 4, index += 3) {
     const a = input[i];
     const b = input[i + 1];
@@ -240,13 +241,17 @@ function decodeBase64Alphabet(input: Uint8Array, length: number, lengthMod4: num
     const bValue = alphabet[b];
     const cValue = alphabet[c];
     const dValue = alphabet[d];
-    if ((aValue | bValue | cValue| dValue) == 255) {
-      throw new Error('Unsupported characters in base64: ' + DECODER.decode(new Uint8Array([a, b, c, d])) + JSON.stringify([aValue, bValue, cValue, dValue]));
+    if (aValue == 255 || bValue == 255 || cValue == 255 || dValue == 255) {
+      unsupported = i;
+      break;
     }
-
     output[index] = (aValue << 2) | ((bValue & 0b110000) >> 4);
     output[index + 1] = ((bValue & 0xF) << 4) | ((cValue & 0b111100) >> 2);
     output[index + 2] = ((cValue & 0b11) << 6) | dValue;
+  }
+  if (unsupported != null) {
+    throw new Error('Unsupported characters in base64: ' + DECODER.decode(new Uint8Array([
+      input[unsupported], input[unsupported + 1], input[unsupported + 2], input[unsupported + 3]])));
   }
   if (lengthMod4 == 2) {
     const a = input[length - 2];
@@ -257,6 +262,9 @@ function decodeBase64Alphabet(input: Uint8Array, length: number, lengthMod4: num
       throw new Error('Unsupported characters in base64: ' + DECODER.decode(new Uint8Array([a, b])) + JSON.stringify([aValue, bValue]));
     }
     output[index] = (aValue << 2) | ((bValue & 0b110000) >> 4);
+    if ((bValue & 0b1111) != 0) {
+      throw new Error('Mangled Base64 padding');
+    }
   } else if (lengthMod4 == 3) {
     const a = input[length - 3];
     const b = input[length - 2];
@@ -269,6 +277,9 @@ function decodeBase64Alphabet(input: Uint8Array, length: number, lengthMod4: num
     }
     output[index] = (aValue << 2 )| ((bValue & 0b110000) >> 4);
     output[index + 1] = ((bValue & 0xF) << 4) | ((cValue & 0b111100) >> 2);
+    if ((cValue & 0b11) != 0) {
+      throw new Error('Mangled Base64 padding');
+    }
   }
 }
 function calculateLength(text: string) {

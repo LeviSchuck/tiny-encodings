@@ -1,5 +1,13 @@
 {
   "tasks": {
-    "dev": "deno run --watch main.ts"
+    "test": "deno test --watch",
+    "bench": "deno bench --watch",
+    "npm": "deno run --allow-env --allow-read --allow-write --allow-run --allow-net scripts/npm.ts"
+  },
+  "lint": {
+    "exclude": ["npm"]
+  },
+  "fmt": {
+    "exclude": ["npm"]
   }
 }

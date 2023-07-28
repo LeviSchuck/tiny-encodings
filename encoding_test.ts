@@ -71,6 +71,10 @@ describe("Base64 Decoding", () => {
     assertThrows(() => {
       decodeBase64("AA/=");
     });
+    assertThrows(() => {
+      // Not enough characters (minimum 2 per chunk)
+      decodeBase64("A===");
+    });
   });
   it("Base64 decoding works", () => {
     assertEquals(

@@ -238,6 +238,10 @@ describe("Base64 Encoding", () => {
   });
   it("Base64 encoding accepts various types", () => {
     assertEquals(encodeBase64(new Uint8Array([0, 0, 0]).buffer), "AAAA");
+    assertEquals(
+      encodeBase64(new DataView(new Uint8Array([0, 0, 0]).buffer)),
+      "AAAA",
+    );
     assertEquals(encodeBase64(new Int8Array([0, 0, 0])), "AAAA");
     // Detect platform endianness
     const array = new Uint8Array(4);

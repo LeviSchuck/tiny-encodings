@@ -24,8 +24,7 @@ and `DataView`s) and output a `string`.
 This library follows the byte order of the host, this means that typed arrays
 such as `Uint32Array` will be encoded in the byte order in its underlying memory
 buffer which is host specific. If platform compatibility is required for
-multi-byte buffers, one may create a `Uint8Array` of equivalent underlying size
-and write each element in big endian or little endian order with a `DataView`.
+multi-byte buffers, see `arrayToEndian` and `arrayFromEndian`.
 
 _Initially, this library was going to be the reference implementation, as seen
 in `encoding_reference.ts`. However, the reference implementation performance is
@@ -38,8 +37,8 @@ by refusing mangled encoded inputs.
 // NPM
 // import { decodeBase64 } from "@levischuck/tiny-encodings";
 // or Deno
-// import { decodeBase64 } from "https://deno.land/x/tiny_encodings@version/encoding.ts";
-import { decodeBase64 } from "./encoding.ts";
+// import { decodeBase64 } from "https://deno.land/x/tiny_encodings@version/index.ts";
+import { decodeBase64 } from "./index.ts";
 
 decodeBase64("SGVsbG8gd29ybGQ=");
 // returns a Uint8Array with the bytes for "Hello world"

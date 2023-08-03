@@ -68,10 +68,14 @@ describe("Hex Encoding", () => {
     assertEquals(encodeHex(view), "00FF00FF");
   });
   it("Hex encoding takes Various array types", () => {
+    // ArrayBuffer
+    assertEquals(encodeHex(new Uint8Array([1, 2, 3]).buffer), "010203");
+    // Typed Arrays
     assertEquals(encodeHex(new Uint8Array([1, 2, 3])), "010203");
     assertEquals(encodeHex(new Int8Array([1, 2, 3])), "010203");
     assertEquals(encodeHex(new Uint8ClampedArray([1, 2, 3])), "010203");
 
+    // Detect platform endianness
     const array = new Uint8Array(4);
     const view = new Uint32Array(array.buffer);
     if (!((view[0] = 1) & array[0])) {
@@ -80,11 +84,11 @@ describe("Hex Encoding", () => {
       assertEquals(encodeHex(new Int16Array([1, 2, 3])), "000100020003");
       assertEquals(
         encodeHex(new Uint32Array([1, 2, 3])),
-        "0000000100000002000000003",
+        "000000010000000200000003",
       );
       assertEquals(
         encodeHex(new Int32Array([1, 2, 3])),
-        "0000000100000002000000003",
+        "000000010000000200000003",
       );
       assertEquals(
         encodeHex(new BigUint64Array([1n, 2n, 3n])),
@@ -231,6 +235,59 @@ describe("Base64 Encoding", () => {
     assertThrows(() => {
       encodeBase64("hello" as any);
     });
+  });
+  it("Base64 encoding accepts various types", () => {
+    assertEquals(encodeBase64(new Uint8Array([0, 0, 0]).buffer), "AAAA");
+    assertEquals(encodeBase64(new Int8Array([0, 0, 0])), "AAAA");
+    // Detect platform endianness
+    const array = new Uint8Array(4);
+    const view = new Uint32Array(array.buffer);
+    if (!((view[0] = 1) & array[0])) {
+      // Host is Big Endian
+      assertEquals(encodeBase64(new Uint16Array([1, 2, 3])), "AAEAAgAD");
+      assertEquals(encodeBase64(new Int16Array([1, 2, 3])), "AAEAAgAD");
+      assertEquals(
+        encodeBase64(new Uint32Array([1, 2, 3])),
+        "AAAAAQAAAAIAAAAD",
+      );
+      assertEquals(
+        encodeBase64(new Int32Array([1, 2, 3])),
+        "AAAAAQAAAAIAAAAD",
+      );
+      assertEquals(
+        encodeBase64(new BigUint64Array([1n, 2n, 3n])),
+        "AAAAAAAAAAEAAAAAAAAAAgAAAAAAAAAD",
+      );
+      assertEquals(
+        encodeBase64(new BigInt64Array([1n, 2n, 3n])),
+        "AAAAAAAAAAEAAAAAAAAAAgAAAAAAAAAD",
+      );
+    } else {
+      // Host Little Endian
+      assertEquals(encodeBase64(new Uint16Array([1, 2, 3])), "AQACAAMA");
+      assertEquals(encodeBase64(new Int16Array([1, 2, 3])), "AQACAAMA");
+      assertEquals(
+        encodeBase64(new Uint32Array([1, 2, 3])),
+        "AQAAAAIAAAADAAAA",
+      );
+      assertEquals(
+        encodeBase64(new Int32Array([1, 2, 3])),
+        "AQAAAAIAAAADAAAA",
+      );
+      assertEquals(
+        encodeBase64(new BigUint64Array([1n, 2n, 3n])),
+        "AQAAAAAAAAACAAAAAAAAAAMAAAAAAAAA",
+      );
+      assertEquals(
+        encodeBase64(new BigInt64Array([1n, 2n, 3n])),
+        "AQAAAAAAAAACAAAAAAAAAAMAAAAAAAAA",
+      );
+    }
+    assertEquals(encodeBase64(new Float32Array([1.0, 2.0])), "AACAPwAAAEA=");
+    assertEquals(
+      encodeBase64(new Float64Array([1.0, 2.0])),
+      "AAAAAAAA8D8AAAAAAAAAQA==",
+    );
   });
 });
 describe("Base64 URL Encoding", () => {

@@ -21,6 +21,12 @@ Where decoding functions take `string`s and output a `Uint8Array`s, and encoding
 functions take any buffer type (`ArrayBuffer`, `Uint8Array`, other typed arrays,
 and `DataView`s) and output a `string`.
 
+This library follows the byte order of the host, this means that typed arrays
+such as `Uint32Array` will be encoded in the byte order in its underlying memory
+buffer which is host specific. If platform compatibility is required for
+multi-byte buffers, one may create a `Uint8Array` of equivalent underlying size
+and write each element in big endian or little endian order with a `DataView`.
+
 _Initially, this library was going to be the reference implementation, as seen
 in `encoding_reference.ts`. However, the reference implementation performance is
 abysmal._

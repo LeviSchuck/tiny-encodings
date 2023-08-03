@@ -76,6 +76,28 @@ describe("Base64 Decoding", () => {
       decodeBase64("A===");
     });
   });
+
+  it("Base64 denies illegal characters", () => {
+    assertThrows(() => {
+      decodeBase64("A%==");
+    });
+    assertThrows(() => {
+      decodeBase64("AA%=");
+    });
+    assertThrows(() => {
+      decodeBase64("AAA%");
+    });
+  });
+
+  it("Base64 denies non strings", () => {
+    assertThrows(() => {
+      decodeBase64(123 as any);
+    });
+    assertThrows(() => {
+      decodeBase64(new Uint8Array([1, 2, 3]) as any);
+    });
+  });
+
   it("Base64 decoding works", () => {
     assertEquals(
       decodeBase64("AA=="),
@@ -188,5 +210,13 @@ describe("Base64 URL Decoding", () => {
     );
     assertEquals(decodeBase64Url("AAD-"), new Uint8Array([0, 0, 254]));
     assertEquals(decodeBase64Url("AAD_"), new Uint8Array([0, 0, 255]));
+  });
+  it("Base64 URL decoding rejects non strings", () => {
+    assertThrows(() => {
+      decodeBase64Url(123 as any);
+    });
+    assertThrows(() => {
+      decodeBase64Url(new Uint8Array([1, 2, 3]) as any);
+    });
   });
 });

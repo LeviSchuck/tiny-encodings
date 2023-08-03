@@ -1,5 +1,11 @@
 # Tiny Encodings
 
+[![](https://img.shields.io/github/actions/workflow/status/levischuck/tiny-encodings/build.yml?branch=main)](https://github.com/LeviSchuck/tiny-encodings/actions)
+[![](https://img.shields.io/codecov/c/gh/levischuck/tiny-encodings?style=flat-square)](https://codecov.io/gh/levischuck/tiny-encodings)
+[![](https://badge.fury.io/js/@levischuck%2Ftiny-encodings.svg)](https://www.npmjs.com/package/@levischuck/tiny-encodings)
+[![](https://img.shields.io/github/license/levischuck/tiny-encodings)](https://github.com/LeviSchuck/tiny-encodings/blob/main/LICENSE.txt)
+![](https://img.shields.io/bundlephobia/min/%40levischuck/tiny-encodings)
+
 A companion library to join a few other `tiny-*` libraries.
 
 This library provides reasonably fast implementations of:

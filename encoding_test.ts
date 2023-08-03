@@ -78,21 +78,48 @@ describe("Hex Encoding", () => {
       // Host is Big Endian
       assertEquals(encodeHex(new Uint16Array([1, 2, 3])), "000100020003");
       assertEquals(encodeHex(new Int16Array([1, 2, 3])), "000100020003");
-      assertEquals(encodeHex(new Uint32Array([1, 2, 3])), "0000000100000002000000003");
-      assertEquals(encodeHex(new Int32Array([1, 2, 3])), "0000000100000002000000003");
-      assertEquals(encodeHex(new BigUint64Array([1n, 2n, 3n])), "000000000000000100000000000000020000000000000003");
-      assertEquals(encodeHex(new BigInt64Array([1n, 2n, 3n])), "000000000000000100000000000000020000000000000003");
+      assertEquals(
+        encodeHex(new Uint32Array([1, 2, 3])),
+        "0000000100000002000000003",
+      );
+      assertEquals(
+        encodeHex(new Int32Array([1, 2, 3])),
+        "0000000100000002000000003",
+      );
+      assertEquals(
+        encodeHex(new BigUint64Array([1n, 2n, 3n])),
+        "000000000000000100000000000000020000000000000003",
+      );
+      assertEquals(
+        encodeHex(new BigInt64Array([1n, 2n, 3n])),
+        "000000000000000100000000000000020000000000000003",
+      );
     } else {
       // Host Little Endian
       assertEquals(encodeHex(new Uint16Array([1, 2, 3])), "010002000300");
       assertEquals(encodeHex(new Int16Array([1, 2, 3])), "010002000300");
-      assertEquals(encodeHex(new Uint32Array([1, 2, 3])), "010000000200000003000000");
-      assertEquals(encodeHex(new Int32Array([1, 2, 3])), "010000000200000003000000");
-      assertEquals(encodeHex(new BigUint64Array([1n, 2n, 3n])), "010000000000000002000000000000000300000000000000");
-      assertEquals(encodeHex(new BigInt64Array([1n, 2n, 3n])), "010000000000000002000000000000000300000000000000");
+      assertEquals(
+        encodeHex(new Uint32Array([1, 2, 3])),
+        "010000000200000003000000",
+      );
+      assertEquals(
+        encodeHex(new Int32Array([1, 2, 3])),
+        "010000000200000003000000",
+      );
+      assertEquals(
+        encodeHex(new BigUint64Array([1n, 2n, 3n])),
+        "010000000000000002000000000000000300000000000000",
+      );
+      assertEquals(
+        encodeHex(new BigInt64Array([1n, 2n, 3n])),
+        "010000000000000002000000000000000300000000000000",
+      );
     }
     assertEquals(encodeHex(new Float32Array([1.0, 2.0])), "0000803F00000040");
-    assertEquals(encodeHex(new Float64Array([1.0, 2.0])), "000000000000F03F0000000000000040");
+    assertEquals(
+      encodeHex(new Float64Array([1.0, 2.0])),
+      "000000000000F03F0000000000000040",
+    );
   });
 });
 

@@ -135,11 +135,9 @@ function encodeBase64Length(
   }
   if (mod3 == 1) {
     return [withPadding - 2, completeChunks, mod3];
-  } else if (mod3 == 2) {
-    return [withPadding - 1, completeChunks, mod3];
   }
-  // unreachable
-  return [withPadding, completeChunks, mod3];
+  // mod3 == 2
+  return [withPadding - 1, completeChunks, mod3];
 }
 
 const BASE64_ALPHABET =

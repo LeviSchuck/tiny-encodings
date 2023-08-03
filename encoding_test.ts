@@ -43,6 +43,7 @@ describe("Hex Decoding", () => {
 
 describe("Hex Encoding", () => {
   it("Hex encoding works", () => {
+    assertEquals(encodeHex(new Uint8Array([])), "");
     assertEquals(encodeHex(new Uint8Array([0x00])), "00");
     assertEquals(encodeHex(new Uint8Array([0, 255, 0, 255])), "00FF00FF");
   });
@@ -60,6 +61,38 @@ describe("Hex Encoding", () => {
     assertThrows(() => {
       encodeHex("taco" as any);
     });
+  });
+  it("Hex encoding takes dataview", () => {
+    const data = new Uint8Array([0, 255, 0, 255]);
+    const view = new DataView(data.buffer);
+    assertEquals(encodeHex(view), "00FF00FF");
+  });
+  it("Hex encoding takes Various array types", () => {
+    assertEquals(encodeHex(new Uint8Array([1, 2, 3])), "010203");
+    assertEquals(encodeHex(new Int8Array([1, 2, 3])), "010203");
+    assertEquals(encodeHex(new Uint8ClampedArray([1, 2, 3])), "010203");
+
+    const array = new Uint8Array(4);
+    const view = new Uint32Array(array.buffer);
+    if (!((view[0] = 1) & array[0])) {
+      // Host is Big Endian
+      assertEquals(encodeHex(new Uint16Array([1, 2, 3])), "000100020003");
+      assertEquals(encodeHex(new Int16Array([1, 2, 3])), "000100020003");
+      assertEquals(encodeHex(new Uint32Array([1, 2, 3])), "0000000100000002000000003");
+      assertEquals(encodeHex(new Int32Array([1, 2, 3])), "0000000100000002000000003");
+      assertEquals(encodeHex(new BigUint64Array([1n, 2n, 3n])), "000000000000000100000000000000020000000000000003");
+      assertEquals(encodeHex(new BigInt64Array([1n, 2n, 3n])), "000000000000000100000000000000020000000000000003");
+    } else {
+      // Host Little Endian
+      assertEquals(encodeHex(new Uint16Array([1, 2, 3])), "010002000300");
+      assertEquals(encodeHex(new Int16Array([1, 2, 3])), "010002000300");
+      assertEquals(encodeHex(new Uint32Array([1, 2, 3])), "010000000200000003000000");
+      assertEquals(encodeHex(new Int32Array([1, 2, 3])), "010000000200000003000000");
+      assertEquals(encodeHex(new BigUint64Array([1n, 2n, 3n])), "010000000000000002000000000000000300000000000000");
+      assertEquals(encodeHex(new BigInt64Array([1n, 2n, 3n])), "010000000000000002000000000000000300000000000000");
+    }
+    assertEquals(encodeHex(new Float32Array([1.0, 2.0])), "0000803F00000040");
+    assertEquals(encodeHex(new Float64Array([1.0, 2.0])), "000000000000F03F0000000000000040");
   });
 });
 
@@ -164,6 +197,8 @@ describe("Base64 Encoding", () => {
     );
     assertEquals(encodeBase64(new Uint8Array([0, 0, 254])), "AAD+");
     assertEquals(encodeBase64(new Uint8Array([0, 0, 255])), "AAD/");
+    assertEquals(encodeBase64(new Uint8Array([0])), "AA==");
+    assertEquals(encodeBase64(new Uint8Array([0, 0])), "AAA=");
   });
   it("Throws when given non buffers", () => {
     assertThrows(() => {
@@ -179,6 +214,8 @@ describe("Base64 URL Encoding", () => {
     );
     assertEquals(encodeBase64Url(new Uint8Array([0, 0, 254])), "AAD-");
     assertEquals(encodeBase64Url(new Uint8Array([0, 0, 255])), "AAD_");
+    assertEquals(encodeBase64Url(new Uint8Array([0])), "AA");
+    assertEquals(encodeBase64Url(new Uint8Array([0, 0])), "AAA");
   });
 });
 describe("Base64 URL Decoding", () => {

@@ -12,6 +12,7 @@ import {
   encodeBase64Url,
   encodeHex,
 } from "./encoding.ts";
+import { hostIsBigEndian } from "./endianness.ts";
 
 const textEncoder = new TextEncoder();
 
@@ -76,9 +77,7 @@ describe("Hex Encoding", () => {
     assertEquals(encodeHex(new Uint8ClampedArray([1, 2, 3])), "010203");
 
     // Detect platform endianness
-    const array = new Uint8Array(4);
-    const view = new Uint32Array(array.buffer);
-    if (!((view[0] = 1) & array[0])) {
+    if (hostIsBigEndian()) {
       // Host is Big Endian
       assertEquals(encodeHex(new Uint16Array([1, 2, 3])), "000100020003");
       assertEquals(encodeHex(new Int16Array([1, 2, 3])), "000100020003");
@@ -244,9 +243,7 @@ describe("Base64 Encoding", () => {
     );
     assertEquals(encodeBase64(new Int8Array([0, 0, 0])), "AAAA");
     // Detect platform endianness
-    const array = new Uint8Array(4);
-    const view = new Uint32Array(array.buffer);
-    if (!((view[0] = 1) & array[0])) {
+    if (hostIsBigEndian()) {
       // Host is Big Endian
       assertEquals(encodeBase64(new Uint16Array([1, 2, 3])), "AAEAAgAD");
       assertEquals(encodeBase64(new Int16Array([1, 2, 3])), "AAEAAgAD");

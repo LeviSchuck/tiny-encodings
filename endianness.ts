@@ -2,12 +2,27 @@ import { ENDIAN_TEST } from "./endianness_internal.ts";
 import type { BufferType, TypedArray } from "./internal.ts";
 import { bufferToDataView } from "./internal.ts";
 
+/**
+ * Inspect if the byte ordering of this process is big endian.
+ *
+ * @returns true if the process uses big endian memory order
+ */
 export function hostIsBigEndian(): boolean {
   return ENDIAN_TEST[1] != 0;
 }
+/**
+ * Inspect if the byte ordering of this process is little endian.
+ *
+ * @returns true if the process uses little endian memory order
+ */
 export function hostIsLittleEndian(): boolean {
   return ENDIAN_TEST[0] != 0;
 }
+/**
+ * Inspect if the byte ordering of this process is big or little endian.
+ *
+ * @returns "big" if the system is big endian, otherwise "little".
+ */
 export function hostEndianness(): "little" | "big" {
   return hostIsBigEndian() ? "big" : "little";
 }
@@ -40,6 +55,21 @@ function internalArrayFrom(
   return output;
 }
 
+/**
+ * This function takes a typed input array and encodes all elements in the
+ * requested endianness order, so that the input array may be communicated
+ * in a reliable way to another recipient.
+ *
+ * Protocols may specify that numbers are encoded in "big" endian, while the
+ * host uses "little" endian byte ordering in memory. This function may help
+ * in ensuring that sequences of multi-byte numbers are portable between
+ * processes.
+ *
+ * @param array Input array to encode
+ * @param endianness what endianness to encode the input array as
+ * @returns an output Uint8Array with bytes set in the requested endianness
+ *          order which represents the multi-byte numbers in the input array.
+ */
 export function arrayToEndian(
   array: TypedArray,
   endianness: "little" | "big",
@@ -103,7 +133,7 @@ export function arrayToEndian(
       (v, i, n, l) => v.setFloat64(i, n as number, l),
     );
   }
-  // Int8Array, Float32Array, Float64Array
+  // Int8Array
   return new Uint8Array(array.buffer);
 }
 
@@ -157,6 +187,26 @@ export function arrayFromEndian(
   endianness: "little" | "big",
   type: "float64",
 ): Float64Array;
+
+/**
+ * This function receives a sequence of bytes, which is known to contain
+ * multi-byte numbers encoded with a known endianness, and outputs a typed
+ * array of those multi-byte numbers in the requested format / type.
+ *
+ * Will throw if the input array is not sized for the type that is asked for.
+ * If you are processing a section of data in a larger sequence of bytes then
+ * use a DataView.
+ *
+ * @param array Source bytes to read from, various types are supported, the
+ *              bytes will be read as they are stored in memory. While it can
+ *              take a Uint32Array type, this is not advised.
+ * @param endianness the endianness of bytes, most protocols use "big",
+ *                   while most systems use "little".
+ * @param type the output type desired, for example "uint32" will
+ *             return a Uint32Array.
+ * @returns a typed array populated with the numbers sourced from the input
+ *          array with the endianness taken into account
+ */
 export function arrayFromEndian(
   array: BufferType,
   endianness: "little" | "big",
@@ -183,6 +233,9 @@ export function arrayFromEndian(
       (v, i, _l) => v.getInt8(i),
     );
   } else if (type == "uint16") {
+    if (view.byteLength & 1) {
+      throw new Error("Incomplete byte sequence");
+    }
     return internalArrayFrom(
       view,
       littleEndian,
@@ -191,6 +244,9 @@ export function arrayFromEndian(
       (v, i, l) => v.getUint16(i, l),
     );
   } else if (type == "int16") {
+    if (view.byteLength & 1) {
+      throw new Error("Incomplete byte sequence");
+    }
     return internalArrayFrom(
       view,
       littleEndian,
@@ -199,6 +255,9 @@ export function arrayFromEndian(
       (v, i, l) => v.getInt16(i, l),
     );
   } else if (type == "uint32") {
+    if (view.byteLength & 3) {
+      throw new Error("Incomplete byte sequence");
+    }
     return internalArrayFrom(
       view,
       littleEndian,
@@ -207,6 +266,9 @@ export function arrayFromEndian(
       (v, i, l) => v.getUint32(i, l),
     );
   } else if (type == "int32") {
+    if (view.byteLength & 3) {
+      throw new Error("Incomplete byte sequence");
+    }
     return internalArrayFrom(
       view,
       littleEndian,
@@ -215,6 +277,9 @@ export function arrayFromEndian(
       (v, i, l) => v.getInt32(i, l),
     );
   } else if (type == "uint64") {
+    if (view.byteLength & 7) {
+      throw new Error("Incomplete byte sequence");
+    }
     return internalArrayFrom(
       view,
       littleEndian,
@@ -223,6 +288,9 @@ export function arrayFromEndian(
       (v, i, l) => v.getBigUint64(i, l),
     );
   } else if (type == "int64") {
+    if (view.byteLength & 7) {
+      throw new Error("Incomplete byte sequence");
+    }
     return internalArrayFrom(
       view,
       littleEndian,
@@ -231,6 +299,9 @@ export function arrayFromEndian(
       (v, i, l) => v.getBigInt64(i, l),
     );
   } else if (type == "float32") {
+    if (view.byteLength & 3) {
+      throw new Error("Incomplete byte sequence");
+    }
     return internalArrayFrom(
       view,
       littleEndian,
@@ -239,6 +310,9 @@ export function arrayFromEndian(
       (v, i, l) => v.getFloat32(i, l),
     );
   } else if (type == "float64") {
+    if (view.byteLength & 7) {
+      throw new Error("Incomplete byte sequence");
+    }
     return internalArrayFrom(
       view,
       littleEndian,

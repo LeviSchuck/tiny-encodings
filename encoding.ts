@@ -1,4 +1,4 @@
-import type { BufferType, TypedArray } from "./internal.ts";
+import type { BufferType } from "./internal.ts";
 import { bufferToDataView } from "./internal.ts";
 
 const DECODER = new TextDecoder();
@@ -21,7 +21,19 @@ function encodeHexFromView(view: DataView): string {
   return DECODER.decode(hexBytes);
 }
 
-export function encodeHex(array: ArrayBuffer | TypedArray | DataView): string {
+/**
+ * Encode a data view, typed array, or array buffer as a hex string
+ *
+ * Note that multi-byte types will be encoded according to the process's
+ * endianness. Therefore, for portability, it is recommended to use
+ * `arrayToEndian` on multi-byte typed arrays, such as Uint32Array before
+ * encoding as hex.
+ *
+ * @param array input array to encode
+ * @returns a string which when decoded as hex will have the same bytes as was
+ *          input.
+ */
+export function encodeHex(array: BufferType): string {
   if (
     array instanceof Uint8Array ||
     array instanceof Int8Array ||
@@ -46,6 +58,18 @@ export function encodeHex(array: ArrayBuffer | TypedArray | DataView): string {
 }
 
 const BAD_INPUT_HEX = "Bad input to decodeHex";
+/**
+ * Decode a hex string into a Uint8Array
+ *
+ * Will throw when the input text has non hex characters, including spaces,
+ * or when the input text has a length which is not even.
+ *
+ * Upper and lower A-F are accepted.
+ * Characters outside of 0-9, A-F, a-f will throw.
+ *
+ * @param text input text of hex characters
+ * @returns a decoded Uint8Array
+ */
 export function decodeHex(text: string): Uint8Array {
   if (text == "") {
     return new Uint8Array();
@@ -161,12 +185,44 @@ function encodeBase64Alphabet(
   return DECODER.decode(output);
 }
 
+/**
+ * A base64 standard implementation, see RFC4648
+ * https://datatracker.ietf.org/doc/html/rfc4648
+ * section Base 64 Encoding
+ *
+ * This function will encode input bytes into a string using the characters
+ * A-Z, a-z, 0-9, +, /, and = as padding at the end.
+ *
+ * Note that multi-byte types will be encoded according to the process's
+ * endianness. Therefore, for portability, it is recommended to use
+ * `arrayToEndian` on multi-byte typed arrays, such as Uint32Array before
+ * encoding as hex.
+ *
+ * @param array Input data to encode
+ * @returns a text string matching Base64
+ */
 export function encodeBase64(
   array: BufferType,
 ): string {
   return encodeBase64Alphabet(array, BASE64_OUT, true);
 }
 
+/**
+ * A base64 url implementation, see RFC4648
+ * https://datatracker.ietf.org/doc/html/rfc4648 section
+ * Base 64 Encoding with URL and Filename Safe Alphabet
+ *
+ * This function will encode input bytes into a string using the characters
+ * A-Z, a-z, 0-9, -, _, and with no padding.
+ *
+ * Note that multi-byte types will be encoded according to the process's
+ * endianness. Therefore, for portability, it is recommended to use
+ * `arrayToEndian` on multi-byte typed arrays, such as Uint32Array before
+ * encoding as hex.
+ *
+ * @param array Input data to encode
+ * @returns a text string matching Base64
+ */
 export function encodeBase64Url(
   array: BufferType,
 ): string {
@@ -266,9 +322,25 @@ function calculateLength(text: Uint8Array) {
   }
   return [length, lengthMod4, byteLength];
 }
+/**
+ * Decode a base64 standard input into a Uint8Array
+ *
+ * This function will throw when characters other than A-Z, a-z, 0-9, +, and
+ * / are used, with the exception of allowing = at the end.
+ *
+ * This function will throw when the base64 input padding is mangled.
+ *
+ * This function will throw when the length does not meet expectations.
+ *
+ * @param text Input base64 standard string
+ * @returns an output Uint8Array of decoded bytes
+ */
 export function decodeBase64(text: string): Uint8Array {
   if (typeof text != "string") {
     throw new Error("Expecting a string");
+  }
+  if (text.length == 0) {
+    return new Uint8Array([]);
   }
   if (BASE64_CACHE[0] == 0) {
     for (let i = 0; i < 256; i++) {
@@ -284,9 +356,25 @@ export function decodeBase64(text: string): Uint8Array {
   decodeBase64Alphabet(input, length, lengthMod4, output, BASE64_CACHE);
   return output;
 }
+/**
+ * Decode a base64 url input into a Uint8Array
+ *
+ * This function will throw when characters other than A-Z, a-z, 0-9, -, and
+ * _ are used. No padding is expected.
+ *
+ * This function will throw when the base64 input padding is mangled.
+ *
+ * This function will throw when the length does not meet expectations.
+ *
+ * @param text Input base64 standard string
+ * @returns an output Uint8Array of decoded bytes
+ */
 export function decodeBase64Url(text: string): Uint8Array {
   if (typeof text != "string") {
     throw new Error("Expecting a string");
+  }
+  if (text.length == 0) {
+    return new Uint8Array([]);
   }
   if (BASE64_URL_CACHE[0] == 0) {
     for (let i = 0; i < 256; i++) {

@@ -15,6 +15,7 @@ import {
   hostIsLittleEndian,
 } from "./endianness.ts";
 import { decodeHex } from "./encoding.ts";
+import { assertThrows } from "https://deno.land/std@0.195.0/assert/assert_throws.ts";
 
 describe("Finds endianness automatically", () => {
   it("Initializes with endianness ", () => {
@@ -194,6 +195,9 @@ describe("array from", () => {
       arrayFromEndian(decodeHex("01000200"), "little", "uint16"),
       new Uint16Array([1, 2]),
     );
+    assertThrows(() => {
+      arrayFromEndian(decodeHex("01"), "little", "uint16");
+    });
   });
   it("int16", () => {
     assertEquals(
@@ -204,6 +208,9 @@ describe("array from", () => {
       arrayFromEndian(decodeHex("FEFF0200"), "little", "int16"),
       new Int16Array([-2, 2]),
     );
+    assertThrows(() => {
+      arrayFromEndian(decodeHex("01"), "little", "int16");
+    });
   });
   it("uint32", () => {
     assertEquals(
@@ -214,6 +221,15 @@ describe("array from", () => {
       arrayFromEndian(decodeHex("0100000002000000"), "little", "uint32"),
       new Uint32Array([1, 2]),
     );
+    assertThrows(() => {
+      arrayFromEndian(decodeHex("01"), "little", "uint32");
+    });
+    assertThrows(() => {
+      arrayFromEndian(decodeHex("0102"), "little", "uint32");
+    });
+    assertThrows(() => {
+      arrayFromEndian(decodeHex("010203"), "little", "uint32");
+    });
   });
   it("int32", () => {
     assertEquals(
@@ -224,6 +240,15 @@ describe("array from", () => {
       arrayFromEndian(decodeHex("FEFFFFFF02000000"), "little", "int32"),
       new Int32Array([-2, 2]),
     );
+    assertThrows(() => {
+      arrayFromEndian(decodeHex("01"), "little", "int32");
+    });
+    assertThrows(() => {
+      arrayFromEndian(decodeHex("0102"), "little", "int32");
+    });
+    assertThrows(() => {
+      arrayFromEndian(decodeHex("010203"), "little", "int32");
+    });
   });
   it("uint64", () => {
     assertEquals(
@@ -242,6 +267,27 @@ describe("array from", () => {
       ),
       new BigUint64Array([1n, 2n]),
     );
+    assertThrows(() => {
+      arrayFromEndian(decodeHex("01"), "little", "uint64");
+    });
+    assertThrows(() => {
+      arrayFromEndian(decodeHex("0102"), "little", "uint64");
+    });
+    assertThrows(() => {
+      arrayFromEndian(decodeHex("010203"), "little", "uint64");
+    });
+    assertThrows(() => {
+      arrayFromEndian(decodeHex("01020304"), "little", "uint64");
+    });
+    assertThrows(() => {
+      arrayFromEndian(decodeHex("0102030405"), "little", "uint64");
+    });
+    assertThrows(() => {
+      arrayFromEndian(decodeHex("010203040506"), "little", "uint64");
+    });
+    assertThrows(() => {
+      arrayFromEndian(decodeHex("01020304050607"), "little", "uint64");
+    });
   });
   it("int64", () => {
     assertEquals(
@@ -260,6 +306,27 @@ describe("array from", () => {
       ),
       new BigInt64Array([-2n, 2n]),
     );
+    assertThrows(() => {
+      arrayFromEndian(decodeHex("01"), "little", "int64");
+    });
+    assertThrows(() => {
+      arrayFromEndian(decodeHex("0102"), "little", "int64");
+    });
+    assertThrows(() => {
+      arrayFromEndian(decodeHex("010203"), "little", "int64");
+    });
+    assertThrows(() => {
+      arrayFromEndian(decodeHex("01020304"), "little", "int64");
+    });
+    assertThrows(() => {
+      arrayFromEndian(decodeHex("0102030405"), "little", "int64");
+    });
+    assertThrows(() => {
+      arrayFromEndian(decodeHex("010203040506"), "little", "int64");
+    });
+    assertThrows(() => {
+      arrayFromEndian(decodeHex("01020304050607"), "little", "int64");
+    });
   });
   it("float32", () => {
     assertEquals(
@@ -270,6 +337,15 @@ describe("array from", () => {
       arrayFromEndian(decodeHex("000000C000000040"), "little", "float32"),
       new Float32Array([-2, 2]),
     );
+    assertThrows(() => {
+      arrayFromEndian(decodeHex("01"), "little", "float32");
+    });
+    assertThrows(() => {
+      arrayFromEndian(decodeHex("0102"), "little", "float32");
+    });
+    assertThrows(() => {
+      arrayFromEndian(decodeHex("010203"), "little", "float32");
+    });
   });
   it("float64", () => {
     assertEquals(
@@ -288,5 +364,26 @@ describe("array from", () => {
       ),
       new Float64Array([-2, 2]),
     );
+    assertThrows(() => {
+      arrayFromEndian(decodeHex("01"), "little", "float64");
+    });
+    assertThrows(() => {
+      arrayFromEndian(decodeHex("0102"), "little", "float64");
+    });
+    assertThrows(() => {
+      arrayFromEndian(decodeHex("010203"), "little", "float64");
+    });
+    assertThrows(() => {
+      arrayFromEndian(decodeHex("01020304"), "little", "float64");
+    });
+    assertThrows(() => {
+      arrayFromEndian(decodeHex("0102030405"), "little", "float64");
+    });
+    assertThrows(() => {
+      arrayFromEndian(decodeHex("010203040506"), "little", "float64");
+    });
+    assertThrows(() => {
+      arrayFromEndian(decodeHex("01020304050607"), "little", "float64");
+    });
   });
 });

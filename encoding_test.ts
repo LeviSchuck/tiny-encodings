@@ -163,6 +163,10 @@ describe("Base64 Decoding", () => {
 
   it("Base64 decoding works", () => {
     assertEquals(
+      decodeBase64(""),
+      new Uint8Array([]),
+    );
+    assertEquals(
       decodeBase64("AA=="),
       new Uint8Array([0]),
     );
@@ -305,6 +309,10 @@ describe("Base64 URL Encoding", () => {
 });
 describe("Base64 URL Decoding", () => {
   it("Base64 url decoding works", () => {
+    assertEquals(
+      decodeBase64Url(""),
+      new Uint8Array([]),
+    );
     assertEquals(
       decodeBase64Url("aGVsbG8gd29ybGQ"),
       textEncoder.encode("hello world"),

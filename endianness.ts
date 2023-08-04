@@ -137,6 +137,25 @@ export function arrayToEndian(
   return new Uint8Array(array.buffer);
 }
 
+/**
+ * This function receives a sequence of bytes, which is known to contain
+ * multi-byte numbers encoded with a known endianness, and outputs a typed
+ * array of those multi-byte numbers in the requested format / type.
+ *
+ * Will throw if the input array is not sized for the type that is asked for.
+ * If you are processing a section of data in a larger sequence of bytes then
+ * use a DataView.
+ *
+ * @param array Source bytes to read from, various types are supported, the
+ *              bytes will be read as they are stored in memory. While it can
+ *              take a Uint32Array type, this is not advised.
+ * @param endianness the endianness of bytes, most protocols use "big",
+ *                   while most systems use "little".
+ * @param type the output type desired, for example "uint32" will
+ *             return a Uint32Array.
+ * @returns a typed array populated with the numbers sourced from the input
+ *          array with the endianness taken into account
+ */
 export function arrayFromEndian(
   view: BufferType,
   endianness: "little" | "big",
@@ -187,26 +206,6 @@ export function arrayFromEndian(
   endianness: "little" | "big",
   type: "float64",
 ): Float64Array;
-
-/**
- * This function receives a sequence of bytes, which is known to contain
- * multi-byte numbers encoded with a known endianness, and outputs a typed
- * array of those multi-byte numbers in the requested format / type.
- *
- * Will throw if the input array is not sized for the type that is asked for.
- * If you are processing a section of data in a larger sequence of bytes then
- * use a DataView.
- *
- * @param array Source bytes to read from, various types are supported, the
- *              bytes will be read as they are stored in memory. While it can
- *              take a Uint32Array type, this is not advised.
- * @param endianness the endianness of bytes, most protocols use "big",
- *                   while most systems use "little".
- * @param type the output type desired, for example "uint32" will
- *             return a Uint32Array.
- * @returns a typed array populated with the numbers sourced from the input
- *          array with the endianness taken into account
- */
 export function arrayFromEndian(
   array: BufferType,
   endianness: "little" | "big",

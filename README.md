@@ -3,7 +3,6 @@
 [![](https://img.shields.io/github/actions/workflow/status/levischuck/tiny-encodings/build.yml?branch=main)](https://github.com/LeviSchuck/tiny-encodings/actions)
 [![](https://img.shields.io/codecov/c/gh/levischuck/tiny-encodings?style=flat-square)](https://codecov.io/gh/levischuck/tiny-encodings)
 [![](https://img.shields.io/github/v/tag/levischuck/tiny-encodings?label=npm&logo=npm&style=flat-square)](https://www.npmjs.com/package/@levischuck/tiny-encodings)
-[![](https://img.shields.io/github/v/tag/levischuck/tiny-encodings?label=deno&logo=deno&style=flat-square)](https://deno.land/x/tiny_encodings)
 [![](https://img.shields.io/jsr/v/%40levischuck/tiny-encodings)](https://jsr.io/@levischuck/tiny-encodings)
 [![](https://img.shields.io/github/license/levischuck/tiny-encodings)](https://github.com/LeviSchuck/tiny-encodings/blob/main/LICENSE.txt)
 ![](https://img.shields.io/bundlephobia/min/%40levischuck/tiny-encodings)
@@ -32,14 +31,16 @@ _Initially, this library was going to be the reference implementation, as seen
 in `encoding_reference.ts`. However, the reference implementation performance is
 abysmal._
 
+This library is no longer automatically published to Deno's Third Party Modules. Newer versions may appear on deno.land/x, but do not work.
+
 Tiny-encodings mitigates [Base64 Malleability](https://eprint.iacr.org/2022/361)
 by refusing mangled encoded inputs.
+
+## Example
 
 ```ts
 // NPM
 // import { decodeBase64 } from "@levischuck/tiny-encodings";
-// or Deno
-// import { decodeBase64 } from "https://deno.land/x/tiny_encodings@version/index.ts";
 // or JSR
 // import { decodeBase64 } from "jsr:@levischuck/tiny-encodings";
 import { decodeBase64 } from "./index.ts";
@@ -47,3 +48,9 @@ import { decodeBase64 } from "./index.ts";
 decodeBase64("SGVsbG8gd29ybGQ=");
 // returns a Uint8Array with the bytes for "Hello world"
 ```
+
+## Where to get it
+
+This library is available on [NPM](https://www.npmjs.com/package/@levischuck/tiny-encodings) and [JSR](https://jsr.io/@levischuck/tiny-encodings).
+
+This library is no longer automatically published to Deno's Third Party Modules. Newer versions may appear on deno.land/x, but do not work.

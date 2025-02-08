@@ -1,6 +1,6 @@
 # Tiny Encodings
 
-[![](https://img.shields.io/github/actions/workflow/status/levischuck/tiny-encodings/build.yml?branch=main)](https://github.com/LeviSchuck/tiny-encodings/actions)
+[![](https://img.shields.io/github/actions/workflow/status/levischuck/tiny-encodings/build.yml?branch=main&style=flat-square)](https://github.com/LeviSchuck/tiny-encodings/actions)
 [![](https://img.shields.io/codecov/c/gh/levischuck/tiny-encodings?style=flat-square)](https://codecov.io/gh/levischuck/tiny-encodings)
 [![](https://img.shields.io/github/v/tag/levischuck/tiny-encodings?label=npm&logo=npm&style=flat-square)](https://www.npmjs.com/package/@levischuck/tiny-encodings)
 [![](https://img.shields.io/jsr/v/%40levischuck/tiny-encodings?style=flat-square&logo=jsr&label=JSR)](https://jsr.io/@levischuck/tiny-encodings)

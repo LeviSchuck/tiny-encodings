@@ -1,3 +1,6 @@
+/**
+ * Any typed array (such as Uint8Array)
+ */
 export type TypedArray =
   | Int8Array
   | Uint8Array
@@ -10,6 +13,10 @@ export type TypedArray =
   | Float64Array
   | BigInt64Array
   | BigUint64Array;
+
+/**
+ * Any Typed array (such as Uint8Array), Unknown ArrayBuffer (will be treated as Uint8Array) or DataView
+ */
 export type BufferType = TypedArray | ArrayBuffer | DataView;
 export function bufferToDataView(v: BufferType): DataView {
   if (v instanceof DataView) {

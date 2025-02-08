@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.3](https://github.com/LeviSchuck/tiny-encodings/compare/v0.2.2...v0.2.3) (2025-02-08)
+
+
+### Bug Fixes
+
+* Bump std for Deno 2 ([27bff2a](https://github.com/LeviSchuck/tiny-encodings/commit/27bff2a6aa297a064e6559dd390d5bdac4dc78b8))
+
 ## [0.2.2](https://github.com/LeviSchuck/tiny-encodings/compare/0.2.1...v0.2.2) (2025-02-08)
 
 

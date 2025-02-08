@@ -1,5 +1,5 @@
-import { assertEquals } from "https://deno.land/std@0.224.0/assert/mod.ts";
-import { describe, it } from "https://deno.land/std@0.224.0/testing/bdd.ts";
+import { assertEquals, assertThrows } from "jsr:@std/assert";
+import { describe, it } from "jsr:@std/testing/bdd";
 
 import {
   ENDIAN_TEST,
@@ -15,7 +15,6 @@ import {
   hostIsLittleEndian,
 } from "./endianness.ts";
 import { decodeHex } from "./encoding.ts";
-import { assertThrows } from "https://deno.land/std@0.224.0/assert/assert_throws.ts";
 
 describe("Finds endianness automatically", () => {
   it("Initializes with endianness ", () => {

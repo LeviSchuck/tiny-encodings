@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.9](https://github.com/LeviSchuck/tiny-encodings/compare/v0.2.8...v0.2.9) (2025-02-08)
+
+
+### Bug Fixes
+
+* Add more docs ([0d9cfd9](https://github.com/LeviSchuck/tiny-encodings/commit/0d9cfd9be3f4ae496da4764a1d4fa8cae89c3323))
+
 ## [0.2.8](https://github.com/LeviSchuck/tiny-encodings/compare/v0.2.7...v0.2.8) (2025-02-08)
 
 

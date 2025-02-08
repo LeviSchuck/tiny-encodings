@@ -1,0 +1,71 @@
+on:
+  push:
+    branches:
+      - main
+
+name: release-please
+
+jobs:
+  release-please:
+    permissions:
+      id-token: write # Allow connecting to other services like AWS
+      contents: write # Able to create release commit
+      pull-requests: write # Able to create release PR
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run attempt
+        env:
+          ATTEMPT: ${{ github.run_attempt }}
+        run: echo "Run attempt $ATTEMPT"
+      - uses: googleapis/release-please-action@v4
+        id: release
+        with:
+          token: ${{ secrets.RELEASE_PLEASE_PAT }}
+          release-type: simple
+      - uses: denoland/setup-deno@v2
+        if: ${{ steps.release.outputs.prs_created }}
+        with:
+          deno-version: v2.x
+      - uses: actions/checkout@v4
+        if: ${{ steps.release.outputs.prs_created }}
+      - name: Update release PR
+        if: ${{ steps.release.outputs.prs_created && steps.release.outputs.pr }}
+        shell: bash
+        env:
+          JSON: ${{ steps.release.outputs.pr }}
+        run: |
+          BRANCH=$(echo $JSON | jq -r '.headBranchName')
+          echo "Branch name ${BRANCH}"
+          git fetch origin "${BRANCH}"
+          git checkout "${BRANCH}"
+          deno task version
+          git config user.name "Levi Schuck"
+          git config user.email "me@levischuck.com"
+          git add . && git commit -m "chore: Update version in deno" && git push || echo "No update needed"
+      - uses: actions/checkout@v4
+        if: ${{ steps.release.outputs.release_created }}
+      - name: Get tag version
+        if: ${{ steps.release.outputs.release_created }}
+        id: get_tag_version
+        run: echo TAG_VERSION=$(cat "version.txt") >> $GITHUB_OUTPUT
+      - uses: denoland/setup-deno@v2
+        if: ${{ steps.release.outputs.release_created }}
+        with:
+          deno-version: v2.x
+      # When tagged, prepare it for publishing
+      - uses: actions/setup-node@v4
+        if: ${{ steps.release.outputs.release_created }}
+        with:
+          node-version: "22.x"
+          registry-url: "https://registry.npmjs.org"
+      - name: npm build
+        if: ${{ steps.release.outputs.release_created }}
+        run: deno task npm ${{steps.get_tag_version.outputs.TAG_VERSION}}
+      - name: npm publish
+        if: ${{ steps.release.outputs.release_created }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: cd npm && npm publish --access public
+      - name: Publish JSX
+        if: ${{ steps.release.outputs.release_created }}
+        run: npx jsr publish

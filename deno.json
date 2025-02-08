@@ -1,0 +1,25 @@
+{
+  "tasks": {
+    "test": "deno test --watch",
+    "bench": "deno bench --watch",
+    "npm": "deno run --allow-env --allow-read --allow-write --allow-run --allow-net scripts/npm.ts",
+    "version": "deno run --allow-read --allow-write scripts/version.ts"
+  },
+  "lint": {
+    "exclude": [
+      "npm"
+    ]
+  },
+  "fmt": {
+    "exclude": [
+      "npm",
+      "CHANGELOG.md",
+      ".github",
+      ".vscode"
+    ]
+  },
+  "name": "@levischuck/tiny-encodings",
+  "version": "0.2.1",
+  "license": "MIT",
+  "exports": "./index.ts"
+}

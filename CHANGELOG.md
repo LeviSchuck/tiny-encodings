@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.7](https://github.com/LeviSchuck/tiny-encodings/compare/v0.2.6...v0.2.7) (2025-02-08)
+
+
+### Bug Fixes
+
+* Add docs to reference functions because JSR is silly and doesn't recognize it isn't exported ([fc5f8e3](https://github.com/LeviSchuck/tiny-encodings/commit/fc5f8e3644047ffdc1f662b2a65b1bffb63de9a0))
+
 ## [0.2.6](https://github.com/LeviSchuck/tiny-encodings/compare/v0.2.5...v0.2.6) (2025-02-08)
 
 

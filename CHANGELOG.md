@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.4](https://github.com/LeviSchuck/tiny-encodings/compare/v0.2.3...v0.2.4) (2025-02-08)
+
+
+### Bug Fixes
+
+* Bump Deno To Node ([a56251b](https://github.com/LeviSchuck/tiny-encodings/commit/a56251bac778ba644e91d0ffed21d76dbd03663f))
+
 ## [0.2.3](https://github.com/LeviSchuck/tiny-encodings/compare/v0.2.2...v0.2.3) (2025-02-08)
 
 

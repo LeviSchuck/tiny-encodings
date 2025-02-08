@@ -4,8 +4,7 @@
 [![](https://img.shields.io/codecov/c/gh/levischuck/tiny-encodings?style=flat-square)](https://codecov.io/gh/levischuck/tiny-encodings)
 [![](https://img.shields.io/github/v/tag/levischuck/tiny-encodings?label=npm&logo=npm&style=flat-square)](https://www.npmjs.com/package/@levischuck/tiny-encodings)
 [![](https://img.shields.io/github/v/tag/levischuck/tiny-encodings?label=deno&logo=deno&style=flat-square)](https://deno.land/x/tiny_encodings)
-[![](https://img.shields.io/jsr/v/%40levischuck/tiny-encodings)
-](https://jsr.io/@levischuck/tiny-encodings)
+[![](https://img.shields.io/jsr/v/%40levischuck/tiny-encodings)](https://jsr.io/@levischuck/tiny-encodings)
 [![](https://img.shields.io/github/license/levischuck/tiny-encodings)](https://github.com/LeviSchuck/tiny-encodings/blob/main/LICENSE.txt)
 ![](https://img.shields.io/bundlephobia/min/%40levischuck/tiny-encodings)
 

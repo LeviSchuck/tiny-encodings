@@ -138,6 +138,126 @@ export function arrayToEndian(
 }
 
 /**
+ * Convert any buffer type to a Uint8Array
+ * @param view Any Buffer Type
+ * @param endianness Little or Big Endian
+ * @param type "uint8"
+ * @returns Uint8Array
+ */
+export function arrayFromEndian(
+  view: BufferType,
+  endianness: "little" | "big",
+  type: "uint8",
+): Uint8Array;
+/**
+ * Convert any buffer type to an Int8Array
+ * @param view Any Buffer Type
+ * @param endianness Little or Big Endian
+ * @param type "int8"
+ * @returns Int8Array
+ */
+export function arrayFromEndian(
+  view: BufferType,
+  endianness: "little" | "big",
+  type: "int8",
+): Int8Array;
+/**
+ * Convert any buffer type to a Uint16Array
+ * @param view Any Buffer Type
+ * @param endianness Little or Big Endian
+ * @param type "uint16"
+ * @returns Uint16Array
+ */
+export function arrayFromEndian(
+  view: BufferType,
+  endianness: "little" | "big",
+  type: "uint16",
+): Uint16Array;
+/**
+ * Convert any buffer type to an Int16Array
+ * @param view Any Buffer Type
+ * @param endianness Little or Big Endian
+ * @param type "int16"
+ * @returns Int16Array
+ */
+export function arrayFromEndian(
+  view: BufferType,
+  endianness: "little" | "big",
+  type: "int16",
+): Int16Array;
+/**
+ * Convert any buffer type to a Uint32Array
+ * @param view Any Buffer Type
+ * @param endianness Little or Big Endian
+ * @param type "uint32"
+ * @returns Uint32Array
+ */
+export function arrayFromEndian(
+  view: BufferType,
+  endianness: "little" | "big",
+  type: "uint32",
+): Uint32Array;
+/**
+ * Convert any buffer type to an Int32Array
+ * @param view Any Buffer Type
+ * @param endianness Little or Big Endian
+ * @param type "int32"
+ * @returns Int32Array
+ */
+export function arrayFromEndian(
+  view: BufferType,
+  endianness: "little" | "big",
+  type: "int32",
+): Int32Array;
+/**
+ * Convert any buffer type to a BigUint64Array
+ * @param view Any Buffer Type
+ * @param endianness Little or Big Endian
+ * @param type "uint64"
+ * @returns BigUint64Array
+ */
+export function arrayFromEndian(
+  view: BufferType,
+  endianness: "little" | "big",
+  type: "uint64",
+): BigUint64Array;
+/**
+ * Convert any buffer type to a BigInt64Array
+ * @param view Any Buffer Type
+ * @param endianness Little or Big Endian
+ * @param type "int64"
+ * @returns BigInt64Array
+ */
+export function arrayFromEndian(
+  view: BufferType,
+  endianness: "little" | "big",
+  type: "int64",
+): BigInt64Array;
+/**
+ * Convert any buffer type to a Float32Array
+ * @param view Any Buffer Type
+ * @param endianness Little or Big Endian
+ * @param type "float32"
+ * @returns Float32Array
+ */
+export function arrayFromEndian(
+  view: BufferType,
+  endianness: "little" | "big",
+  type: "float32",
+): Float32Array;
+/**
+ * Convert any buffer type to a Float64Array
+ * @param view Any Buffer Type
+ * @param endianness Little or Big Endian
+ * @param type "float64"
+ * @returns Float64Array
+ */
+export function arrayFromEndian(
+  view: BufferType,
+  endianness: "little" | "big",
+  type: "float64",
+): Float64Array;
+/**
  * This function receives a sequence of bytes, which is known to contain
  * multi-byte numbers encoded with a known endianness, and outputs a typed
  * array of those multi-byte numbers in the requested format / type.
@@ -156,56 +276,6 @@ export function arrayToEndian(
  * @returns a typed array populated with the numbers sourced from the input
  *          array with the endianness taken into account
  */
-export function arrayFromEndian(
-  view: BufferType,
-  endianness: "little" | "big",
-  type: "uint8",
-): Uint8Array;
-export function arrayFromEndian(
-  view: BufferType,
-  endianness: "little" | "big",
-  type: "int8",
-): Int8Array;
-export function arrayFromEndian(
-  view: BufferType,
-  endianness: "little" | "big",
-  type: "uint16",
-): Uint16Array;
-export function arrayFromEndian(
-  view: BufferType,
-  endianness: "little" | "big",
-  type: "int16",
-): Int16Array;
-export function arrayFromEndian(
-  view: BufferType,
-  endianness: "little" | "big",
-  type: "uint32",
-): Uint32Array;
-export function arrayFromEndian(
-  view: BufferType,
-  endianness: "little" | "big",
-  type: "int32",
-): Int32Array;
-export function arrayFromEndian(
-  view: BufferType,
-  endianness: "little" | "big",
-  type: "uint64",
-): BigUint64Array;
-export function arrayFromEndian(
-  view: BufferType,
-  endianness: "little" | "big",
-  type: "int64",
-): BigInt64Array;
-export function arrayFromEndian(
-  view: BufferType,
-  endianness: "little" | "big",
-  type: "float32",
-): Float32Array;
-export function arrayFromEndian(
-  view: BufferType,
-  endianness: "little" | "big",
-  type: "float64",
-): Float64Array;
 export function arrayFromEndian(
   array: BufferType,
   endianness: "little" | "big",

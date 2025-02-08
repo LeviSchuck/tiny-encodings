@@ -12,6 +12,8 @@ jobs:
           deno-version: v2.x
       - name: Check formatting
         run: deno fmt --check
+      - name: Check docs
+        run: deno doc --lint index.ts
       - name: Lint source
         run: deno lint
       - name: Test with coverage output

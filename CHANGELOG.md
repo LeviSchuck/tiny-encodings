@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.6](https://github.com/LeviSchuck/tiny-encodings/compare/v0.2.5...v0.2.6) (2025-02-08)
+
+
+### Bug Fixes
+
+* deno format readme ([b6e6997](https://github.com/LeviSchuck/tiny-encodings/commit/b6e699775942c596509efaea01f556dcb025c958))
+
 ## [0.2.5](https://github.com/LeviSchuck/tiny-encodings/compare/v0.2.4...v0.2.5) (2025-02-08)
 
 

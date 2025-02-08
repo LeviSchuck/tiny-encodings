@@ -31,7 +31,8 @@ _Initially, this library was going to be the reference implementation, as seen
 in `encoding_reference.ts`. However, the reference implementation performance is
 abysmal._
 
-This library is no longer automatically published to Deno's Third Party Modules. Newer versions may appear on deno.land/x, but do not work.
+This library is no longer automatically published to Deno's Third Party Modules.
+Newer versions may appear on deno.land/x, but do not work.
 
 Tiny-encodings mitigates [Base64 Malleability](https://eprint.iacr.org/2022/361)
 by refusing mangled encoded inputs.
@@ -51,6 +52,9 @@ decodeBase64("SGVsbG8gd29ybGQ=");
 
 ## Where to get it
 
-This library is available on [NPM](https://www.npmjs.com/package/@levischuck/tiny-encodings) and [JSR](https://jsr.io/@levischuck/tiny-encodings).
+This library is available on
+[NPM](https://www.npmjs.com/package/@levischuck/tiny-encodings) and
+[JSR](https://jsr.io/@levischuck/tiny-encodings).
 
-This library is no longer automatically published to Deno's Third Party Modules. Newer versions may appear on deno.land/x, but do not work.
+This library is no longer automatically published to Deno's Third Party Modules.
+Newer versions may appear on deno.land/x, but do not work.

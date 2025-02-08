@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.10](https://github.com/LeviSchuck/tiny-encodings/compare/v0.2.9...v0.2.10) (2025-02-08)
+
+
+### Bug Fixes
+
+* Add icon to JSR badge ([eec74f8](https://github.com/LeviSchuck/tiny-encodings/commit/eec74f837adc6f752c0556d189cd50a4d0c5a770))
+
 ## [0.2.9](https://github.com/LeviSchuck/tiny-encodings/compare/v0.2.8...v0.2.9) (2025-02-08)
 
 

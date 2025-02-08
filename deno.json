@@ -19,7 +19,7 @@
     ]
   },
   "name": "@levischuck/tiny-encodings",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "license": "MIT",
   "exports": "./index.ts"
 }

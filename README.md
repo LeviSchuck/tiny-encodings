@@ -40,6 +40,8 @@ by refusing mangled encoded inputs.
 // import { decodeBase64 } from "@levischuck/tiny-encodings";
 // or Deno
 // import { decodeBase64 } from "https://deno.land/x/tiny_encodings@version/index.ts";
+// or JSR
+// import { decodeBase64 } from "jsr:@levischuck/tiny-encodings";
 import { decodeBase64 } from "./index.ts";
 
 decodeBase64("SGVsbG8gd29ybGQ=");

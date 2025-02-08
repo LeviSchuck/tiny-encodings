@@ -1,6 +1,6 @@
 // Reference implementations, several of these come from StackOverflow
 
-/** 
+/**
  * Reference implementation of Hex encoding
  * @param array Input bytes
  * @returns hex encoded string

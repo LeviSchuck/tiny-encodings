@@ -4,7 +4,8 @@
 [![](https://img.shields.io/codecov/c/gh/levischuck/tiny-encodings?style=flat-square)](https://codecov.io/gh/levischuck/tiny-encodings)
 [![](https://img.shields.io/github/v/tag/levischuck/tiny-encodings?label=npm&logo=npm&style=flat-square)](https://www.npmjs.com/package/@levischuck/tiny-encodings)
 [![](https://img.shields.io/jsr/v/%40levischuck/tiny-encodings?style=flat-square&logo=jsr&label=JSR)](https://jsr.io/@levischuck/tiny-encodings)
-[![](https://img.shields.io/github/license/levischuck/tiny-encodings)](https://github.com/LeviSchuck/tiny-encodings/blob/main/LICENSE.txt)
+[![](https://img.shields.io/github/license/levischuck/tiny-encodings?style=flat-square
+)](https://github.com/LeviSchuck/tiny-encodings/blob/main/LICENSE.txt)
 ![](https://img.shields.io/bundlephobia/min/%40levischuck/tiny-encodings)
 
 A companion library to join a few other `tiny-*` libraries.

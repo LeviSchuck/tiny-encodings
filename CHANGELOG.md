@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.2.8](https://github.com/LeviSchuck/tiny-encodings/compare/v0.2.7...v0.2.8) (2025-02-08)
+
+
+### Bug Fixes
+
+* Add type docs ([2e8ae33](https://github.com/LeviSchuck/tiny-encodings/commit/2e8ae33444096764beda32ba5fa05a61e7a45355))
+* Deno fmt ([032c5c7](https://github.com/LeviSchuck/tiny-encodings/commit/032c5c715a234a1c4554512c6229c88be450fbd7))
+* Switch to JSR dependencies ([f0728c8](https://github.com/LeviSchuck/tiny-encodings/commit/f0728c834758ca35a03287e3cceddcebc4b25d2c))
+
 ## [0.2.7](https://github.com/LeviSchuck/tiny-encodings/compare/v0.2.6...v0.2.7) (2025-02-08)
 
 

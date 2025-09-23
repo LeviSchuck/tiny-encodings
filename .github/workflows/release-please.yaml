@@ -26,8 +26,8 @@ jobs:
         if: ${{ steps.release.outputs.prs_created }}
         with:
           deno-version: v2.x
-      - uses: actions/checkout@v4
-        if: ${{ steps.release.outputs.prs_created }}
+      - uses: actions/checkout@v5
+        if: ${{ steps.release.outputs.prs_created || steps.release.outputs.release_created }}
       - name: Update release PR
         if: ${{ steps.release.outputs.prs_created && steps.release.outputs.pr }}
         shell: bash
@@ -42,8 +42,6 @@ jobs:
           git config user.name "Levi Schuck"
           git config user.email "me@levischuck.com"
           git add . && git commit -m "chore: Update version in deno" && git push || echo "No update needed"
-      - uses: actions/checkout@v4
-        if: ${{ steps.release.outputs.release_created }}
       - name: Get tag version
         if: ${{ steps.release.outputs.release_created }}
         id: get_tag_version
@@ -53,7 +51,7 @@ jobs:
         with:
           deno-version: v2.x
       # When tagged, prepare it for publishing
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         if: ${{ steps.release.outputs.release_created }}
         with:
           node-version: "22.x"

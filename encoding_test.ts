@@ -1,6 +1,6 @@
 //deno-lint-ignore-file no-explicit-any
-import { assertEquals, assertThrows } from "jsr:@std/assert";
-import { describe, it } from "jsr:@std/testing/bdd";
+import { assertEquals, assertThrows } from "@std/assert";
+import { describe, it } from "@std/testing/bdd";
 import {
   decodeBase64,
   decodeBase64Url,

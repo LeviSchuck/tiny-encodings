@@ -4,9 +4,11 @@ on: push
 
 jobs:
   build:
+    if: ${{ github.ref_type != 'tag' || !(startsWith(github.ref_name, 'v') && contains(github.ref_name, '.')) }}
     runs-on: ubuntu-latest
     permissions:
-      id-token: write # Used for OIDC to Codecov
+      contents: read
+      id-token: write
     steps:
       - uses: actions/checkout@v5
       - uses: denoland/setup-deno@v2
@@ -30,4 +32,3 @@ jobs:
           files: ./coverage.lcov
           use_oidc: true
           fail_ci_if_error: true
-

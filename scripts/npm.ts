@@ -18,7 +18,7 @@ await build({
     license: "MIT",
     repository: {
       type: "git",
-      url: "git+https://github.com/levischuck/tiny-encodings.git",
+      url: "https://github.com/LeviSchuck/tiny-encodings",
     },
     bugs: {
       url: "https://github.com/levischuck/tiny-encodings/issues",

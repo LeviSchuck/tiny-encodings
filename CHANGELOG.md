@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.2.12](https://github.com/LeviSchuck/tiny-encodings/compare/v0.2.11...v0.2.12) (2026-06-18)
+
+
+### Bug Fixes
+
+* Make it more compatible with typescript 6 and 7 ([734f672](https://github.com/LeviSchuck/tiny-encodings/commit/734f67206d1112b1d5092d9f20add215167f460e))
+* Migrate publish workflow to Trusted Publisher flow on npm ([ba9c398](https://github.com/LeviSchuck/tiny-encodings/commit/ba9c39857488f54d5383c4296f60ef9db40f5869))
+
 ## [0.2.11](https://github.com/LeviSchuck/tiny-encodings/compare/v0.2.10...v0.2.11) (2025-09-23)
 
 

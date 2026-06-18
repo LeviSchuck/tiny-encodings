@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.13](https://github.com/LeviSchuck/tiny-encodings/compare/v0.2.12...v0.2.13) (2026-06-18)
+
+
+### Bug Fixes
+
+* Match expected npm provenance url ([50d51f2](https://github.com/LeviSchuck/tiny-encodings/commit/50d51f2faac3d69bfb764e005da865af82c0e3a4))
+
 ## [0.2.12](https://github.com/LeviSchuck/tiny-encodings/compare/v0.2.11...v0.2.12) (2026-06-18)
 
 

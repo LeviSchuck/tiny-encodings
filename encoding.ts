@@ -307,17 +307,14 @@ function calculateLength(
 ): [number, number, number] {
   const inputLength = text.length;
   let dataLength = inputLength;
-  let paddingLength = 0;
   if (padding) {
     if (inputLength % 4 != 0) {
       throw new Error("Invalid base64 length");
     }
     if (text[dataLength - 1] == 61) {
-      paddingLength++;
       dataLength--;
     }
     if (text[dataLength - 1] == 61) {
-      paddingLength++;
       dataLength--;
     }
   }
@@ -327,12 +324,6 @@ function calculateLength(
     }
   }
   const lengthMod4 = dataLength % 4;
-  if (padding) {
-    const expectedPadding = lengthMod4 == 2 ? 2 : lengthMod4 == 3 ? 1 : 0;
-    if (paddingLength != expectedPadding) {
-      throw new Error("Mangled Base64 padding");
-    }
-  }
   let byteLength: number;
   if (lengthMod4 == 2) {
     byteLength = ((dataLength - 2) / 4) * 3 + 1;

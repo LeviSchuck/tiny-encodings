@@ -352,7 +352,7 @@ describe("Base64 URL Decoding", () => {
     });
   });
   it("Base64 URL decoding rejects padding", () => {
-    for (const value of ["AA=", "AA==", "AAA="]) {
+    for (const value of ["A", "AA=", "AA==", "AAA="]) {
       assertThrows(() => decodeBase64Url(value));
     }
   });

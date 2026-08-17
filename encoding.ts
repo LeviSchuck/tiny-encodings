@@ -301,26 +301,49 @@ function decodeBase64Alphabet(
     }
   }
 }
-function calculateLength(text: Uint8Array) {
-  let length = text.length;
-  // Subtract padding
-  for (let i = length - 1; i >= 0; i--) {
-    if (text[i] == 61) {
-      length = i;
+function calculateLength(
+  text: Uint8Array,
+  padding: boolean,
+): [number, number, number] {
+  const inputLength = text.length;
+  let dataLength = inputLength;
+  let paddingLength = 0;
+  if (padding) {
+    if (inputLength % 4 != 0) {
+      throw new Error("Invalid base64 length");
+    }
+    if (text[dataLength - 1] == 61) {
+      paddingLength++;
+      dataLength--;
+    }
+    if (text[dataLength - 1] == 61) {
+      paddingLength++;
+      dataLength--;
     }
   }
-  const lengthMod4 = length % 4;
+  for (let i = 0; i < dataLength; i++) {
+    if (text[i] == 61) {
+      throw new Error("Mangled Base64 padding");
+    }
+  }
+  const lengthMod4 = dataLength % 4;
+  if (padding) {
+    const expectedPadding = lengthMod4 == 2 ? 2 : lengthMod4 == 3 ? 1 : 0;
+    if (paddingLength != expectedPadding) {
+      throw new Error("Mangled Base64 padding");
+    }
+  }
   let byteLength: number;
   if (lengthMod4 == 2) {
-    byteLength = ((length - 2) / 4) * 3 + 1;
+    byteLength = ((dataLength - 2) / 4) * 3 + 1;
   } else if (lengthMod4 == 3) {
-    byteLength = ((length - 3) / 4) * 3 + 2;
+    byteLength = ((dataLength - 3) / 4) * 3 + 2;
   } else if (lengthMod4 == 0) {
-    byteLength = length / 4 * 3;
+    byteLength = dataLength / 4 * 3;
   } else {
     throw new Error("Invalid base64 length");
   }
-  return [length, lengthMod4, byteLength];
+  return [dataLength, lengthMod4, byteLength];
 }
 /**
  * Decode a base64 standard input into a Uint8Array
@@ -328,7 +351,8 @@ function calculateLength(text: Uint8Array) {
  * This function will throw when characters other than A-Z, a-z, 0-9, +, and
  * / are used, with the exception of allowing = at the end.
  *
- * This function will throw when the base64 input padding is mangled.
+ * This function will throw when the base64 input padding is mangled or
+ * not a multiple of 4.
  *
  * This function will throw when the length does not meet expectations.
  *
@@ -351,7 +375,7 @@ export function decodeBase64(text: string): Uint8Array {
     }
   }
   const input = ENCODER.encode(text);
-  const [length, lengthMod4, byteLength] = calculateLength(input);
+  const [length, lengthMod4, byteLength] = calculateLength(input, true);
   const output = new Uint8Array(byteLength);
   decodeBase64Alphabet(input, length, lengthMod4, output, BASE64_CACHE);
   return output;
@@ -385,7 +409,7 @@ export function decodeBase64Url(text: string): Uint8Array {
     }
   }
   const input = ENCODER.encode(text);
-  const [length, lengthMod4, byteLength] = calculateLength(input);
+  const [length, lengthMod4, byteLength] = calculateLength(input, false);
   const output = new Uint8Array(byteLength);
   decodeBase64Alphabet(input, length, lengthMod4, output, BASE64_URL_CACHE);
   return output;

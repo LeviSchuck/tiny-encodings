@@ -125,28 +125,33 @@ describe("Hex Encoding", () => {
 
 describe("Base64 Decoding", () => {
   it("Base64 denies mangled padding", () => {
-    assertThrows(() => {
-      decodeBase64("A/==");
-    });
-    assertThrows(() => {
-      decodeBase64("AA/=");
-    });
-    assertThrows(() => {
-      // Not enough characters (minimum 2 per chunk)
-      decodeBase64("A===");
-    });
+    for (
+      const value of [
+        "A/==",
+        "AA/=",
+        "A===",
+        "====",
+        "=AAA",
+        "AA=A",
+        "AA==AA==",
+        "Zg=",
+        "Zg===",
+      ]
+    ) {
+      assertThrows(() => decodeBase64(value));
+    }
+  });
+
+  it("Base64 requires canonical padding", () => {
+    for (const value of ["A", "AA", "AAA"]) {
+      assertThrows(() => decodeBase64(value));
+    }
   });
 
   it("Base64 denies illegal characters", () => {
-    assertThrows(() => {
-      decodeBase64("A%==");
-    });
-    assertThrows(() => {
-      decodeBase64("AA%=");
-    });
-    assertThrows(() => {
-      decodeBase64("AAA%");
-    });
+    for (const value of ["A%==", "AA%=", "AAA%", "AA-_", "AA==\0", "AA==é"]) {
+      assertThrows(() => decodeBase64(value));
+    }
   });
 
   it("Base64 denies non strings", () => {
@@ -345,5 +350,10 @@ describe("Base64 URL Decoding", () => {
     assertThrows(() => {
       decodeBase64Url(new Uint8Array([1, 2, 3]) as any);
     });
+  });
+  it("Base64 URL decoding rejects padding", () => {
+    for (const value of ["AA=", "AA==", "AAA="]) {
+      assertThrows(() => decodeBase64Url(value));
+    }
   });
 });

@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.3.0](https://github.com/LeviSchuck/tiny-encodings/compare/v0.2.13...v0.3.0) (2026-08-17)
+
+
+### Features
+
+* Reject base64 that isn't a multiple of 4 ([b56f288](https://github.com/LeviSchuck/tiny-encodings/commit/b56f2881621408e45b13d87dd7392a78f04f8c98))
+
+
+### Bug Fixes
+
+* Test coverage, and remove unreachable padding error ([61b9d52](https://github.com/LeviSchuck/tiny-encodings/commit/61b9d520c9c5d3682bd710ffd24c515da7a34ba7))
+
 ## [0.2.13](https://github.com/LeviSchuck/tiny-encodings/compare/v0.2.12...v0.2.13) (2026-06-18)
 
 

@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.1](https://github.com/LeviSchuck/tiny-encodings/compare/v0.3.0...v0.3.1) (2026-08-17)
+
+
+### Bug Fixes
+
+* Update CI to use newer node ([34ca043](https://github.com/LeviSchuck/tiny-encodings/commit/34ca043eaea269e7574d14e52956b703760be328))
+
 ## [0.3.0](https://github.com/LeviSchuck/tiny-encodings/compare/v0.2.13...v0.3.0) (2026-08-17)
 
 

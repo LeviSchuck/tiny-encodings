@@ -133,8 +133,8 @@ export function arrayToEndian(
       (v, i, n, l) => v.setFloat64(i, n as number, l),
     );
   }
-  // Int8Array
-  return new Uint8Array(array.buffer);
+  // Int8Array or Uint8ClampedArray
+  return new Uint8Array(array.buffer, array.byteOffset, array.byteLength);
 }
 
 /**

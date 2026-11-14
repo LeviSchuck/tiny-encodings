@@ -13,6 +13,51 @@ import { hostIsBigEndian } from "./endianness.ts";
 
 const textEncoder = new TextEncoder();
 
+describe("Encoding view boundaries", () => {
+  for (
+    const [name, encode, expected] of [
+      ["hex", encodeHex, "2233"],
+      ["base64", encodeBase64, "IjM="],
+      ["base64url", encodeBase64Url, "IjM"],
+    ] as const
+  ) {
+    it(`${name} encodes only the selected bytes`, () => {
+      const bytes = new Uint8Array([0x00, 0x11, 0x22, 0x33, 0x44, 0x55]);
+      assertEquals(encode(bytes.subarray(2, 4)), expected);
+      assertEquals(encode(new DataView(bytes.buffer, 2, 2)), expected);
+    });
+
+    for (
+      const Type of [
+        Int8Array,
+        Uint8Array,
+        Uint8ClampedArray,
+        Int16Array,
+        Uint16Array,
+        Int32Array,
+        Uint32Array,
+        Float32Array,
+        Float64Array,
+        BigInt64Array,
+        BigUint64Array,
+      ]
+    ) {
+      it(`${name} respects ${Type.name} offsets and lengths`, () => {
+        const bytes = Uint8Array.from({ length: 24 }, (_, i) => i);
+        for (const [offset, length] of [[0, 8], [8, 8], [8, 0], [24, 0]]) {
+          const view = new Type(
+            bytes.buffer,
+            offset,
+            length / Type.BYTES_PER_ELEMENT,
+          );
+          const selected = bytes.slice(offset, offset + length);
+          assertEquals(encode(view), encode(selected));
+        }
+      });
+    }
+  }
+});
+
 describe("Hex Decoding", () => {
   it("Hex decoding works", () => {
     assertEquals(decodeHex("00"), new Uint8Array([0x00]));

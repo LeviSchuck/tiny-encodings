@@ -16,6 +16,72 @@ import {
 } from "./endianness.ts";
 import { decodeHex } from "./encoding.ts";
 
+describe("Endian view boundaries", () => {
+  for (const endianness of ["big", "little"] as const) {
+    for (const Type of [Uint8Array, Int8Array, Uint8ClampedArray]) {
+      it(`arrayToEndian respects ${Type.name} slices in ${endianness} endian`, () => {
+        const bytes = new Uint8Array([0, 17, 255, 128, 68, 85]);
+        for (const [offset, length] of [[0, 2], [2, 2], [2, 0], [6, 0]]) {
+          assertEquals(
+            arrayToEndian(new Type(bytes.buffer, offset, length), endianness),
+            bytes.slice(offset, offset + length),
+          );
+        }
+      });
+    }
+
+    it(`arrayFromEndian converts only the slice in ${endianness} endian`, () => {
+      const bytes = new Uint8Array([0, 17, 34, 51, 68, 85]);
+      assertEquals(
+        arrayFromEndian(bytes.subarray(2, 4), endianness, "uint16"),
+        new Uint16Array([endianness === "big" ? 0x2233 : 0x3322]),
+      );
+      // Length validation must apply to the slice rather than its backing buffer.
+      const oddLengthBuffer = new Uint8Array([0, 17, 34]);
+      assertEquals(
+        arrayFromEndian(oddLengthBuffer.subarray(1), endianness, "uint16"),
+        new Uint16Array([endianness === "big" ? 0x1122 : 0x2211]),
+      );
+      assertThrows(
+        () => arrayFromEndian(bytes.subarray(1, 4), endianness, "uint16"),
+        Error,
+        "Incomplete byte sequence",
+      );
+    });
+  }
+
+  for (
+    const Type of [
+      Int8Array,
+      Uint8Array,
+      Uint8ClampedArray,
+      Int16Array,
+      Uint16Array,
+      Int32Array,
+      Uint32Array,
+      Float32Array,
+      Float64Array,
+      BigInt64Array,
+      BigUint64Array,
+    ]
+  ) {
+    it(`arrayFromEndian respects ${Type.name} offsets and lengths`, () => {
+      const bytes = Uint8Array.from({ length: 24 }, (_, i) => i);
+      for (const [offset, length] of [[0, 8], [8, 8], [8, 0], [24, 0]]) {
+        const view = new Type(
+          bytes.buffer,
+          offset,
+          length / Type.BYTES_PER_ELEMENT,
+        );
+        assertEquals(
+          arrayFromEndian(view, "big", "uint8"),
+          bytes.slice(offset, offset + length),
+        );
+      }
+    });
+  }
+});
+
 describe("Finds endianness automatically", () => {
   it("Initializes with endianness ", () => {
     assertEquals(ENDIAN_TEST[0] + ENDIAN_TEST[1], 1);

@@ -47,7 +47,9 @@ export function encodeHex(array: BufferType): string {
     array instanceof BigInt64Array ||
     array instanceof BigUint64Array
   ) {
-    return encodeHexFromView(new DataView(array.buffer));
+    return encodeHexFromView(
+      new DataView(array.buffer, array.byteOffset, array.byteLength),
+    );
   } else if (array instanceof ArrayBuffer) {
     return encodeHexFromView(new DataView(array));
   } else if (array instanceof DataView) {

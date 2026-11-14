@@ -34,7 +34,7 @@ export function bufferToDataView(v: BufferType): DataView {
     v instanceof BigInt64Array ||
     v instanceof BigUint64Array
   ) {
-    return new DataView(v.buffer);
+    return new DataView(v.buffer, v.byteOffset, v.byteLength);
   } else if (v instanceof ArrayBuffer) {
     return new DataView(v);
   }

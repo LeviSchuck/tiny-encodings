@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.2](https://github.com/LeviSchuck/tiny-encodings/compare/v0.3.1...v0.3.2) (2026-11-14)
+
+
+### Bug Fixes
+
+* byte offsets and lengths were discarded ([#16](https://github.com/LeviSchuck/tiny-encodings/issues/16)) ([c0bd9bf](https://github.com/LeviSchuck/tiny-encodings/commit/c0bd9bf79e92b3bd8d6ba14a1350a206bf3e2081)), closes [#15](https://github.com/LeviSchuck/tiny-encodings/issues/15)
+
 ## [0.3.1](https://github.com/LeviSchuck/tiny-encodings/compare/v0.3.0...v0.3.1) (2026-08-17)
 
 
